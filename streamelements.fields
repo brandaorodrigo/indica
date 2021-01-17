@@ -14,9 +14,78 @@
         "label": "Frase",
         "value": "/me Conheça <user> que estava jogando <game>. Acesse <twitch>"
     },
+    "bordersProfile": {
+        "type": "dropdown",
+        "label": "Arredondar bordas da imagem de perfil",
+        "value": "0",
+        "options": {
+            "0": "0%",
+            "5": "5%",
+            "10": "10%",
+            "15": "15%",
+            "20": "20%",
+            "25": "25%",
+            "30": "30%",
+            "35": "35%",
+            "40": "40%",
+            "45": "45%",
+            "50": "50%"
+        }
+    },
+    "bordersGame": {
+        "type": "dropdown",
+        "label": "Arredondar bordas da imagem do jogo",
+        "value": "0",
+        "options": {
+            "0": "0%",
+            "5": "5%",
+            "10": "10%",
+            "15": "15%",
+            "20": "20%",
+            "25": "25%",
+            "30": "30%",
+            "35": "35%",
+            "40": "40%",
+            "45": "45%",
+            "50": "50%"
+        }
+    },
+    "profileBorderColor": {
+        "type": "colorpicker",
+        "label": "Cor da borda da foto do streamer",
+        "value": "rgba(255, 255, 255, 1)"
+    },
+    "gameBorderColor": {
+        "type": "colorpicker",
+        "label": "Cor da borda da imagem do jogo",
+        "value": "rgba(255, 255, 255, 1)"
+    },
     "font": {
         "type": "googleFont",
         "label": "Fonte",
         "value": "Roboto Mono"
+    },
+    "nameFontStyle": {
+        "type": "dropdown",
+        "label": "Estilo da fonte do nome do streamer",
+        "value": "700",
+        "options": {
+            "400": "Normal",
+            "700": "Negrito",
+            "900": "Black",
+            "400_italic": "Normal Itálico",
+            "700_italic": "Negrito Itálico",
+            "900_italic": "Black Itálico"
+        }
+    },
+    "nameFontColor": {
+        "type": "colorpicker",
+        "label": "Cor da fonte do nome do jogo",
+        "value": "rgba(255, 255, 255, 1)"
+    },
+    "gameFontColor": {
+        "type": "colorpicker",
+        "label": "Cor da fonte do nome do jogo",
+        "value": "rgba(255, 255, 255, 1)"
     }
 }
