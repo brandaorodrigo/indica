@@ -2,7 +2,6 @@
 
 // twitch
 
-$url = "https://api.twitch.tv/kraken/";
 $client_id = "client_id";
 
 // database

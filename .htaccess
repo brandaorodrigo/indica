@@ -13,7 +13,6 @@ Header set X-Robots-Tag "noindex, nofollow"
     RewriteRule ^ %1 [L,R=301]
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+    RewriteRule ^ api.php [L]
 
 </IfModule>
-    
