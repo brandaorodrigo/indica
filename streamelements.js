@@ -1,5 +1,5 @@
-let username,
-    id,
+let id,
+    username,
     token,
     command,
     phrase,
