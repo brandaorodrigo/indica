@@ -1,16 +1,19 @@
-let command, phrase, token, username, id, font, row = []
+let token, command, phrase, font, username, id, row = []
 
 window.addEventListener("onWidgetLoad", (obj) => {
+    token = obj.detail.fieldData.token
     command = obj.detail.fieldData.command
     phrase = obj.detail.fieldData.phrase
-    token = obj.detail.fieldData.token
+    font = obj.detail.fieldData.font
     username = obj.detail.channel.username
     id = obj.detail.channel.id
-    font = obj.detail.fieldData.font
 
     let link = document.createElement("link")
-    link.title = "https://fonts.googleapis.com/css?family=" + font
-    document.body.appendChild(link)
+    link.type = "text/css"
+    link.rel = "stylesheet"
+    link.href = "https://fonts.googleapis.com/css?family=" + font.replace(" ", "+")
+    document.head.appendChild(link)
+    // document.head.insertAdjacentHTML("beforeend", "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=" + font.replace(" ", "+") + "\" />")
     document.querySelector("body").style.fontFamily = font
 })
 
@@ -59,11 +62,11 @@ window.addEventListener("onEventReceived", (obj) => {
                         })
                     }
 
-                    unmout()
+                    unmout(response)
 
                     setTimeout(() => {
-                        unmout()
-                    }, 10000)
+                        unmout(response)
+                    }, 25000)
 
                     Object.keys(response).forEach((key) => {
                         feed(key, response[key])
