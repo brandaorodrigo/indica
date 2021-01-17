@@ -90,7 +90,7 @@ window.addEventListener("onEventReceived", (obj) => {
                 })
                 .then((response) => {
                     let message = phrase
-                    if (response.game) {
+                    if (!response.game) {
                         message = '/me Conheça <name> que não estava jogando. Acesse <url>'
                     }
                     Object.keys(response).forEach((key) => {
