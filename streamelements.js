@@ -1,10 +1,18 @@
-let token, command, phrase, font, username, id, row = []
+let token, command, phrase, bordersProfile, bordersGame, profileBorderColor, gameBorderColor, font, nameFontStyle, gameFontStyle, nameFontColor, gameFontColor, username, id, row = []
 
 window.addEventListener("onWidgetLoad", (obj) => {
     token = obj.detail.fieldData.token
     command = obj.detail.fieldData.command
     phrase = obj.detail.fieldData.phrase
+    bordersProfile = obj.detail.fieldData.bordersProfile
+    bordersGame = obj.detail.fieldData.bordersGame
+    profileBorderColor = obj.detail.fieldData.profileBorderColor
+    gameBorderColor = obj.detail.fieldData.gameBorderColor
     font = obj.detail.fieldData.font
+    nameFontStyle = obj.detail.fieldData.nameFontStyle
+    gameFontStyle = obj.detail.fieldData.gameFontStyle
+    nameFontColor = obj.detail.fieldData.nameFontColor
+    gameFontColor = obj.detail.fieldData.gameFontColor
     username = obj.detail.channel.username
     id = obj.detail.channel.id
 
@@ -15,6 +23,35 @@ window.addEventListener("onWidgetLoad", (obj) => {
     document.head.appendChild(link)
     // document.head.insertAdjacentHTML("beforeend", "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=" + font.replace(" ", "+") + "\" />")
     document.querySelector("body").style.fontFamily = font
+  
+    document.getElementById("image_logo").style.borderRadius = bordersProfile+"%"
+    if(bordersGame > 25){
+    document.getElementById("image_game").style.height = "105px"
+    document.getElementById("image_game").style.objectFit = "cover";
+  }
+    document.getElementById("image_game").style.borderRadius = bordersGame+"%"
+
+    document.getElementById("image_logo").style.borderColor = profileBorderColor
+    document.getElementById("image_game").style.borderColor = gameBorderColor
+
+    checkFont = nameFontStyle.split("_");
+    if(typeof checkFont[1] !== "undefined"){
+        document.getElementById("name").style.fontWeight = checkFont[0];
+        document.getElementById("name").style.fontStyle = checkFont[1];
+    }
+    else{
+        document.getElementById("name").style.fontWeight = nameFontStyle;
+    }
+        checkFont = gameFontStyle.split("_");
+        if(typeof checkFont[1] !== "undefined"){
+        document.getElementById("game").style.fontWeight = checkFont[0];
+        document.getElementById("game").style.fontStyle = checkFont[1];
+    }
+    else{
+        document.getElementById("game").style.fontWeight = gameFontStyle;
+    }
+    document.getElementById("name").style.color = nameFontColor;
+    document.getElementById("game").style.color = gameFontColor;
 })
 
 window.addEventListener("onEventReceived", (obj) => {
