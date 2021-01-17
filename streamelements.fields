@@ -1,0 +1,22 @@
+{
+    "token": {
+        "type": "text",
+        "label": "JWT Token",
+        "value": ""
+    },
+    "command": {
+        "type": "text",
+        "label": "Comando personalizado (ex. !nozes)",
+        "value": "!comando"
+    },
+    "phrase": {
+        "type": "text",
+        "label": "Frase",
+        "value": "/me Conheça <user> que estava jogando <game>. Acesse <twitch>"
+    },
+    "font": {
+        "type": "googleFont",
+        "label": "Fonte",
+        "value": "Roboto Mono"
+    }
+}
