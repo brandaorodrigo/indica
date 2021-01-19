@@ -21,9 +21,9 @@ window.addEventListener("onWidgetLoad", (obj) => {
     token = obj.detail.fieldData.token ? obj.detail.fieldData.token : null
 
     command = obj.detail.fieldData.command ? obj.detail.fieldData.command : SE_API.setField("command", "!indicar")
-    phrase = obj.detail.fieldData.phrase ? obj.detail.fieldData.phrase : SE_API.setField("phrase", "/me Conheça <user> que estava jogando <game>. Acesse <twitch>")
+    phrase = obj.detail.fieldData.phrase ? obj.detail.fieldData.phrase : SE_API.setField("phrase", "/me Conheça <name> que estava jogando <game>. Acesse <url>")
     phrase_game = obj.detail.fieldData.phrase_game ? obj.detail.fieldData.phrase_game : SE_API.setField("phrase_game", "/me Conheça <name> que não estava jogando. Acesse <url>") // TODO = PENSAR SE ISSO É IMPORTANTE
-    phrase_raid = obj.detail.fieldData.phrase_raid ? obj.detail.fieldData.phrase_raid : SE_API.setField("phrase_raid", "/me Conheça <user> que estava jogando <game>. Acesse <twitch>") // TODO = PENSAR SE ISSO É IMPORTANTE
+    phrase_raid = obj.detail.fieldData.phrase_raid ? obj.detail.fieldData.phrase_raid : SE_API.setField("phrase_raid", "/me Conheça <name> que estava jogando <game>. Acesse <url>") // TODO = PENSAR SE ISSO É IMPORTANTE
 
     border_radius = obj.detail.fieldData.border_radius ? obj.detail.fieldData.border_radius : 0
     border_color_user = obj.detail.fieldData.border_color_user ? obj.detail.fieldData.border_color_user : "#ffffff"
@@ -88,7 +88,7 @@ window.addEventListener("onEventReceived", (obj) => {
         if (word[0] === command && typeof word[1] !== "undefined") {
             let badges = obj.detail.event.data.tags.badges.replace(/\d+/g, "").replace(/,/g, "").split("/")
             if (badges.indexOf("moderator") != -1 || badges.indexOf("broadcaster") != -1) {
-                fetch("https://xt.art.br/twitch/" + word[1] + "/" + username)
+                fetch("https://xt.art.br/twitch/" + word[1] + "/" + username + "?d=" + Date.now())
                 .then((response) => {
                     if (response.status != 200)
                         throw new Error()
