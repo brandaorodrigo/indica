@@ -1,77 +1,83 @@
-let id,
-    username,
-    token,
-    command,
-    phrase,
-    font,
-    bordersProfile,
-    bordersGame,
-    profileBorderColor,
-    gameBorderColor,
-    nameFontStyle,
-    gameFontStyle,
-    nameFontColor,
-    gameFontColor,
-    empty = 1,
-    overlay = []
+let id, username,
+    token, command, phrase, phrase_game, phrase_raid,
+    border_radius, border_color_logo, border_color_game,
+    font, font_style_user, font_color_user, font_style_game, font_color_game,
+    empty = 1, overlay = []
 
 window.addEventListener("onWidgetLoad", (obj) => {
+
+    // load html + css
+
+    document.head.insertAdjacentHTML("beforeend", "<link rel=\"stylesheet\" href=\"https://xt.art.br/twitch/streamelements.css\" />")
+    document.body.insertAdjacentHTML("beforeend", "<div id=\"container\" class=\"container\"><div class=\"images-group\"><img id=\"image_logo\"/><img id=\"image_game\"/></div><div class=\"texts\"><div id=\"name\"></div><div id=\"game\"></div></div></div>")
+
+    // native fields
+
     id = obj.detail.channel.id
     username = obj.detail.channel.username
 
-    token = obj.detail.fieldData.token
-    command = obj.detail.fieldData.command
-    phrase = obj.detail.fieldData.phrase
+    // custom fields
 
-    font = obj.detail.fieldData.font
-    bordersProfile = obj.detail.fieldData.bordersProfile
-    bordersGame = obj.detail.fieldData.bordersGame
-    profileBorderColor = obj.detail.fieldData.profileBorderColor
-    gameBorderColor = obj.detail.fieldData.gameBorderColor
-    nameFontStyle = obj.detail.fieldData.nameFontStyle
-    gameFontStyle = obj.detail.fieldData.gameFontStyle
-    nameFontColor = obj.detail.fieldData.nameFontColor
-    gameFontColor = obj.detail.fieldData.gameFontColor
+    token = obj.detail.fieldData.token ? obj.detail.fieldData.token : null
 
-    //let link = document.createElement("link")
-    //link.type = "text/css"
-    //link.rel = "stylesheet"
-    //link.href = "https://fonts.googleapis.com/css?family=" + font.replace(" ", "+")
-    //document.head.appendChild(link)
+    command = obj.detail.fieldData.command ? obj.detail.fieldData.command : SE_API.setField("command", "!indicar")
+    phrase = obj.detail.fieldData.phrase ? obj.detail.fieldData.phrase : SE_API.setField("phrase", "/me Conheça <user> que estava jogando <game>. Acesse <twitch>")
+    phrase_game = obj.detail.fieldData.phrase_game ? obj.detail.fieldData.phrase_game : SE_API.setField("phrase_game", "/me Conheça <name> que não estava jogando. Acesse <url>") // TODO = PENSAR SE ISSO É IMPORTANTE
+    phrase_raid = obj.detail.fieldData.phrase_raid ? obj.detail.fieldData.phrase_raid : SE_API.setField("phrase_raid", "/me Conheça <user> que estava jogando <game>. Acesse <twitch>") // TODO = PENSAR SE ISSO É IMPORTANTE
+
+    border_radius = obj.detail.fieldData.border_radius ? obj.detail.fieldData.border_radius : 0
+    border_color_user = obj.detail.fieldData.border_color_user ? obj.detail.fieldData.border_color_user : "#ffffff"
+    border_color_game = obj.detail.fieldData.border_color_game ? obj.detail.fieldData.border_color_game : "#ffffff"
+
+    font = obj.detail.fieldData.font ? obj.detail.fieldData.font : "Roboto" // TODO = QUAL VAI SER A FONTE PADRAO ?
+    font_style_user = obj.detail.fieldData.font_style_user ? obj.detail.fieldData.font_style_user : "700"
+    font_color_user = obj.detail.fieldData.font_color_user ? obj.detail.fieldData.font_color_user : "#ffffff"
+    font_style_game = obj.detail.fieldData.font_style_game ? obj.detail.fieldData.font_style_game : "400"
+    font_color_game = obj.detail.fieldData.font_color_game ? obj.detail.fieldData.font_color_game : "#ffffff"
+
+    // check
+
+    if (!token) {
+        document.body.insertAdjacentHTML("beforeend", "<div style=\"position:absolute;left:0;top:0;width:100vw;height:100vh;z-index:9999;background:#f00;\">CADASTRE O JWT TOKEN</div>") // TODO = CRIAR HTML QUE EXPLICA O QUE FAZER NO JWT TOKEN
+    }
+
     document.head.insertAdjacentHTML("beforeend", "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=" + font.replace(" ", "+") + "\" />")
     document.querySelector("body").style.fontFamily = font
 
-    if (document.getElementById("image_logo")) {
-        document.getElementById("image_logo").style.borderRadius = bordersProfile + "%"
-        document.getElementById("image_logo").style.borderColor = profileBorderColor
+    if (document.querySelector("#image_logo")) {
+        document.querySelector("#image_logo").style.borderRadius = border_radius + "%"
+        document.querySelector("#image_logo").style.borderColor = border_color_user
     }
-    if (document.getElementById("image_game")) {
-        if (bordersGame > 25) {
-            document.getElementById("image_game").style.height = "105px"
-            document.getElementById("image_game").style.objectFit = "cover"
+
+    if (document.querySelector("#image_game")) {
+        if (border_radius > 25) {
+            document.querySelector("#image_game").style.height = "105px"
+            document.querySelector("#image_game").style.objectFit = "cover"
         }
-        document.getElementById("image_game").style.borderRadius = bordersGame + "%"
-        document.getElementById("image_game").style.borderColor = gameBorderColor
+        document.querySelector("#image_game").style.borderRadius = border_radius + "%"
+        document.querySelector("#image_game").style.borderColor = border_color_game
     }
-    if (document.getElementById("name")) {
-        checkFont = nameFontStyle.split("_")
-        if (typeof checkFont[1] !== "undefined") {
-            document.getElementById("name").style.fontWeight = checkFont[0]
-            document.getElementById("name").style.fontStyle = checkFont[1]
+
+    if (document.querySelector("#name")) {
+        document.querySelector("#name").style.color = font_color_user
+        let check_font_user = font_style_user.split("_")
+        if (typeof check_font_user[1] !== "undefined") {
+            document.querySelector("#name").style.fontWeight = check_font_user[0]
+            document.querySelector("#name").style.fontStyle = check_font_user[1]
         } else {
-            document.getElementById("name").style.fontWeight = nameFontStyle
-            document.getElementById("name").style.color = nameFontColor
+            document.querySelector("#name").style.fontWeight = font_style_user
         }
     }
-    if (document.getElementById("game")) {
-        checkFont = gameFontStyle.split("_")
-        if (typeof checkFont[1] !== "undefined") {
-            document.getElementById("game").style.fontWeight = checkFont[0]
-            document.getElementById("game").style.fontStyle = checkFont[1]
+
+    if (document.querySelector("#game")) {
+        document.querySelector("#game").style.color = font_color_game
+        let check_font_game = font_style_game.split("_")
+        if (typeof check_font_game[1] !== "undefined") {
+            document.querySelector("#game").style.fontWeight = check_font_game[0]
+            document.querySelector("#game").style.fontStyle = check_font_game[1]
         } else {
-            document.getElementById("game").style.fontWeight = gameFontStyle
+            document.querySelector("#game").style.fontWeight = font_style_game
         }
-        document.getElementById("game").style.color = gameFontColor;
     }
 
 })
@@ -91,27 +97,32 @@ window.addEventListener("onEventReceived", (obj) => {
                 .then((response) => {
                     let message = phrase
                     if (!response.game) {
-                        message = '/me Conheça <name> que não estava jogando. Acesse <url>'
+                        message = phrase_game
                     }
-                    Object.keys(response).forEach((key) => {
-                        message = message.replaceAll("<" + key + ">", response[key])
-                    })
-                    fetch("https://api.streamelements.com/kappa/v2/bot/" + id + "/say", {
-                        "method": "POST",
-                        "headers": {
-                            "Accept": "application/json",
-                            "Content-Type": "application/json",
-                            "Authorization": "Bearer " + token
-                        },
-                        "body": JSON.stringify({ "message": message })
-                    })
+                    say(message, response)
                     overlay.push(response)
                     flow()
                 })
             }
         }
     }
+     // TODO = VERIFICAR SE É RAID E SE O PARAMETRO SE QUER ALERTAR RAID ESTA ATIVADO
 })
+
+const say = (message, response) => {
+    Object.keys(response).forEach((key) => {
+        message = message.replaceAll("<" + key + ">", response[key])
+    })
+    fetch("https://api.streamelements.com/kappa/v2/bot/" + id + "/say", {
+        "method": "POST",
+        "headers": {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        "body": JSON.stringify({ "message": message })
+    })
+}
 
 const flow = () => {
     if (empty && overlay.length) {
@@ -121,7 +132,7 @@ const flow = () => {
         setTimeout(() => {
             empty = 1
             flow()
-        }, 24000)
+        }, 22000)
     }
 }
 
@@ -135,11 +146,10 @@ const show = (current) => {
             }
         }
     })
-    // TODO: AQUI IREMOS SETAR A CLASSE DE ANIMACAO E DEPOIS REMOVE-LA
     setTimeout(() => {
-        document.querySelector("#container").style.display = "block"
+        document.querySelector("#container").classList.add("active")
         setTimeout(() => {
-            document.querySelector("#container").style.display = "none"
+            document.querySelector("#container").classList.remove("active")
         }, 20000)
-    }, 2000)
+    }, 1000)
 }

@@ -2,72 +2,58 @@
     "token": {
         "type": "text",
         "label": "JWT Token",
+        "group": "Configuração",
         "value": ""
     },
     "command": {
         "type": "text",
-        "label": "Comando personalizado (ex. !nozes)",
-        "value": "!comando"
+        "label": "Comando",
+        "group": "Configuração",
+        "value": "!indicar"
     },
     "phrase": {
         "type": "text",
         "label": "Frase",
+        "group": "Configuração",
         "value": "/me Conheça <user> que estava jogando <game>. Acesse <twitch>"
     },
-    "bordersProfile": {
+    "border_radius": {
         "type": "dropdown",
-        "label": "Arredondar bordas da imagem de perfil",
+        "label": "Arredondar bordas",
+        "group": "Bordas",
         "value": "0",
         "options": {
             "0": "0%",
             "5": "5%",
             "10": "10%",
-            "15": "15%",
             "20": "20%",
-            "25": "25%",
             "30": "30%",
-            "35": "35%",
             "40": "40%",
-            "45": "45%",
             "50": "50%"
         }
     },
-    "bordersGame": {
-        "type": "dropdown",
-        "label": "Arredondar bordas da imagem do jogo",
-        "value": "0",
-        "options": {
-            "0": "0%",
-            "5": "5%",
-            "10": "10%",
-            "15": "15%",
-            "20": "20%",
-            "25": "25%",
-            "30": "30%",
-            "35": "35%",
-            "40": "40%",
-            "45": "45%",
-            "50": "50%"
-        }
-    },
-    "profileBorderColor": {
+    "border_color_user": {
         "type": "colorpicker",
         "label": "Cor da borda da foto do streamer",
+        "group": "Bordas",
         "value": "rgba(255, 255, 255, 1)"
     },
-    "gameBorderColor": {
+    "border_color_game": {
         "type": "colorpicker",
-        "label": "Cor da borda da imagem do jogo",
+        "label": "Cor da borda da capa do jogo",
+        "group": "Bordas",
         "value": "rgba(255, 255, 255, 1)"
     },
     "font": {
         "type": "googleFont",
         "label": "Fonte",
+        "group": "Fontes",
         "value": "Roboto Mono"
     },
-    "nameFontStyle": {
+    "font_style_user": {
         "type": "dropdown",
         "label": "Estilo da fonte do nome do streamer",
+        "group": "Fontes",
         "value": "700",
         "options": {
             "400": "Normal",
@@ -78,14 +64,30 @@
             "900_italic": "Black Itálico"
         }
     },
-    "nameFontColor": {
+    "font_color_user": {
         "type": "colorpicker",
-        "label": "Cor da fonte do nome do jogo",
+        "label": "Cor da fonte do nome do streamer",
+        "group": "Fontes",
         "value": "rgba(255, 255, 255, 1)"
     },
-    "gameFontColor": {
+    "font_style_game": {
+        "type": "dropdown",
+        "label": "Estilo da fonte do nome do jogo",
+        "group": "Fontes",
+        "value": "700",
+        "options": {
+            "400": "Normal",
+            "700": "Negrito",
+            "900": "Black",
+            "400_italic": "Normal Itálico",
+            "700_italic": "Negrito Itálico",
+            "900_italic": "Black Itálico"
+        }
+    },
+    "font_color_game": {
         "type": "colorpicker",
         "label": "Cor da fonte do nome do jogo",
+        "group": "Fontes",
         "value": "rgba(255, 255, 255, 1)"
     }
 }

@@ -2,13 +2,18 @@ body {
     margin: 10px;
     padding: 0px;
     overflow: hidden;
-    background: #dadada;
 }
 
 .container {
     position: relative;
     max-width: 335px;
     overflow: hidden;
+    opacity: 0;
+    transition: 2s ease-in-out;
+}
+
+.active {
+    opacity: 1;
 }
 
 .container .images-group {
