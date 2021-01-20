@@ -13,7 +13,7 @@ body {
     max-width: 335px;
     height: 365px;
     overflow: hidden;
-    opacity: 0;
+    display: none;
     transition: 2s ease-in-out;
 }
 
@@ -67,39 +67,39 @@ body {
 
 /*Start Animation*/
 .container.active{
-    opacity: 1;
+    display: block;
 }
 
 .active .images-group{
     overflow: hidden;
     top: -268px;
-    animation: lineStart .5s linear 0s forwards, lineStart .5s linear 13.5s alternate-reverse backwards;
+    animation: lineStart .5s linear 0s forwards, lineStart .5s linear 14.5s alternate-reverse backwards;
     animation-fill-mode: forwards;
 }
 
 .active #image_logo{
     margin-left: -500px;
     opacity: 0;
-    animation: profilePhoto .5s linear .8s forwards, profilePhoto .5s linear 13s alternate-reverse backwards;
+    animation: profilePhoto .5s linear .8s forwards, profilePhoto .5s linear 14s alternate-reverse backwards;
     animation-fill-mode: forwards;
 }
 
 .active #image_game{
     width: 0px;
     opacity: 0;
-    animation: gamePhoto .4s linear 1s forwards, gamePhoto .4s linear 13s alternate-reverse backwards;
+    animation: gamePhoto .4s linear 1s forwards, gamePhoto .4s linear 14s alternate-reverse backwards;
     animation-fill-mode: forwards;
 }
 
 .active .texts #name{
     margin-left: -335px;
-    animation: streamerName .9s ease-in-out 1s forwards, streamerName .9s ease-in-out 13s alternate-reverse backwards;
+    animation: streamerName .9s ease-in-out 1s forwards, streamerName .9s ease-in-out 14s alternate-reverse backwards;
     animation-fill-mode: forwards;
 }
 
 .active .texts #game{
     margin-left: 335px;
-    animation: gameName .9s ease-in-out 1s forwards,  gameName .9s ease-in-out 13s alternate-reverse backwards;
+    animation: gameName .9s ease-in-out 1s forwards,  gameName .9s ease-in-out 14s alternate-reverse backwards;
     animation-fill-mode: forwards;
 }
 @keyframes lineStart {
