@@ -44,7 +44,8 @@ body {
 .container .texts {
     text-transform: uppercase;
     padding: 10px 0 0 0;
-    height: 85px;
+    min-height: 85px;
+    height: auto;
 }
 
 .container .texts #name {
