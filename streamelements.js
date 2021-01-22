@@ -120,11 +120,34 @@ function run(channel, caller) {
     })
 }
 
+function resizeFont(){
+	var nameElement = document.getElementById("name"),
+        gameElement = document.getElementById("game"),
+        namefontSize = "",
+        gamefontSize = "";
+    /*Channel Name*/
+    if(nameElement.textContent.length < 8){namefontSize = "40px";}
+    else if(nameElement.textContent.length < 12){namefontSize = "28px";}
+    else if(nameElement.textContent.length < 16){namefontSize = "20px";}
+    else if(nameElement.textContent.length < 21){namefontSize = "15px";}
+    else if(nameElement.textContent.length < 27){namefontSize = "12px";}
+    else if(nameElement.textContent.length < 36){namefontSize = "9px";}
+    else if(nameElement.textContent.length > 35){namefontSize = "8px";}
+    nameElement.style.fontSize = namefontSize;
+    /*Game Name*/
+    if(gameElement.textContent.length < 21){gamefontSize = "22px";}
+    else if(gameElement.textContent.length < 25){gamefontSize = "17px";}
+    else if(gameElement.textContent.length < 31){gamefontSize = "15px";}
+    else if(gameElement.textContent.length > 30){gamefontSize = "12px";}
+    gameElement.style.fontSize = gamefontSize;
+}
+
 function flow() /* overlay, empty */ {
     if (empty && overlay.length) {
         empty = 0
         let current = overlay.shift()
         show(current)
+        resizeFont()
         setTimeout(() => {
             empty = 1
             flow()
