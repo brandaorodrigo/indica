@@ -1,159 +1,317 @@
-*{
-    transform-style: preserve-3d;
-}
-body {
-    overflow: hidden;
-    background: transparent;
-    padding: 0px;
-    margin: 0px;
-}
-
-.container {
-    position: relative;
-    max-width: 335px;
-    height: 365px;
-    overflow: hidden;
-    display: none;
-    transition: 2s ease-in-out;
-}
-
-.container .images-group {
-    position: relative;
-    border-left: 4px solid #fff;
-    padding: 0px 0px 0px 10px;
-    max-height: 268px;
-}
-
-.container #image_logo {
-    border: 4px solid #fff;
-    width: 100%;
-    max-width: 260px;
-    height: auto;
-}
-
-.container #image_game {
-    border: 4px solid #fff;
-    width: 100%;
-    max-width: 105px;
-    height: auto;
-    position: absolute;
-    bottom: 10px;
-    right: 0px;
-}
-
-.container .texts {
-    text-transform: uppercase;
-    padding: 10px 0 0 0;
-    min-height: 85px;
-    height: auto;
-}
-
-.container .texts #name {
-    opacity: 0;
-    color: #fff;
-    font-weight: 700;
-    width: 100%;
-    text-align: right;
-    font-size: 40px;
-}
-
-.container .texts #game {
-    opacity: 0;
-    color: #fff;
-    font-weight: 700;
-    width: 100%;
-    text-align: right;
-    font-size: 22px;
-}
-
-/*Start Animation*/
-.container.active{
-    display: block;
-}
-
-.active .images-group{
-    overflow: hidden;
-    top: -268px;
-    animation: lineStart .5s linear 0s forwards, lineStart .5s linear 14.5s alternate-reverse backwards;
-    animation-fill-mode: forwards;
-}
-
-.active #image_logo{
-    margin-left: -500px;
-    opacity: 0;
-    animation: profilePhoto .5s linear .8s forwards, profilePhoto .5s linear 14s alternate-reverse backwards;
-    animation-fill-mode: forwards;
-}
-
-.active #image_game{
-    width: 0px;
-    opacity: 0;
-    animation: gamePhoto .4s linear 1s forwards, gamePhoto .4s linear 14s alternate-reverse backwards;
-    animation-fill-mode: forwards;
-}
-
-.active .texts #name{
-    margin-left: -335px;
-    animation: streamerName .9s ease-in-out 1s forwards, streamerName .9s ease-in-out 14s alternate-reverse backwards;
-    animation-fill-mode: forwards;
-}
-
-.active .texts #game{
-    margin-left: 335px;
-    animation: gameName .9s ease-in-out 1s forwards,  gameName .9s ease-in-out 14s alternate-reverse backwards;
-    animation-fill-mode: forwards;
-}
-@keyframes lineStart {
-    0% {
-        top: -268px;
-    }
-    100% {
-        top: 0px;
-    }
-}
-
-@keyframes profilePhoto {
-    0% {
-        margin-left: -500px;
-        opacity: 0;
-    }
-    100% {
-        margin-left: 0px;
-        opacity: 1;
-    }
-}
-
-@keyframes gamePhoto {
-    0% {
-        width: 0%;
-        max-width: 0px;
-        opacity: 0;
-    }
-    100% {
-        width: 100%;
-        max-width: 105px;
-        opacity: 1;
-    }
-}
-
-@keyframes streamerName {
-    0% {
-        margin-left: -335px;
-        opacity: 0;
-    }
-    100% {
-        margin-left: 0;
-        opacity: 1;
-    }
-}
-
-@keyframes gameName {
-    0% {
-        margin-left: 335px;
-        opacity: 0;
-    }
-    100% {
-        margin-left: 0;
-        opacity: 1;
-    }
+*{
+
+    transform-style: preserve-3d;
+
+}
+
+body {
+
+    overflow: hidden;
+
+    background: transparent;
+
+    padding: 0px;
+
+    margin: 0px;
+
+}
+
+
+
+.container {
+
+    position: relative;
+
+    max-width: 335px;
+
+    max-height: 365px;
+
+    overflow: hidden;
+
+    display: none;
+
+    transition: 2s ease-in-out;
+
+}
+
+
+
+.container .images-group {
+
+    position: relative;
+
+    border-left: 4px solid #fff;
+
+    padding: 0px 0px 0px 10px;
+
+    max-height: 268px;
+
+}
+
+
+
+.container #image_logo {
+
+    border: 4px solid #fff;
+
+    width: 100%;
+
+    max-width: 260px;
+
+    height: auto;
+
+}
+
+
+
+.container #image_game {
+
+    border: 4px solid #fff;
+
+    width: 100%;
+
+    max-width: 105px;
+
+    height: auto;
+
+    position: absolute;
+
+    bottom: 10px;
+
+    right: 0px;
+
+}
+
+
+
+.container .texts {
+
+    text-transform: uppercase;
+
+    padding: 10px 0 0 0;
+
+    min-height: 85px;
+
+    height: auto;
+
+}
+
+
+
+.container .texts #name {
+
+    opacity: 0;
+
+    color: #fff;
+
+    font-weight: 700;
+
+    width: 100%;
+
+    text-align: right;
+
+    font-size: 40px;
+
+}
+
+
+
+.container .texts #game {
+
+    opacity: 0;
+
+    color: #fff;
+
+    font-weight: 700;
+
+    width: 100%;
+
+    text-align: right;
+
+    font-size: 22px;
+
+}
+
+
+
+/*Start Animation*/
+
+.container.active{
+
+    display: block;
+
+}
+
+
+
+.active .images-group{
+
+    overflow: hidden;
+
+    top: -268px;
+
+    animation: lineStart .5s linear 0s forwards, lineStart .5s linear 14.5s alternate-reverse backwards;
+
+    animation-fill-mode: forwards;
+
+}
+
+
+
+.active #image_logo{
+
+    margin-left: -500px;
+
+    opacity: 0;
+
+    animation: profilePhoto .5s linear .8s forwards, profilePhoto .5s linear 14s alternate-reverse backwards;
+
+    animation-fill-mode: forwards;
+
+}
+
+
+
+.active #image_game{
+
+    width: 0px;
+
+    opacity: 0;
+
+    animation: gamePhoto .4s linear 1s forwards, gamePhoto .4s linear 14s alternate-reverse backwards;
+
+    animation-fill-mode: forwards;
+
+}
+
+
+
+.active .texts #name{
+
+    margin-left: -335px;
+
+    animation: streamerName .9s ease-in-out 1s forwards, streamerName .9s ease-in-out 14s alternate-reverse backwards;
+
+    animation-fill-mode: forwards;
+
+}
+
+
+
+.active .texts #game{
+
+    margin-left: 335px;
+
+    animation: gameName .9s ease-in-out 1s forwards,  gameName .9s ease-in-out 14s alternate-reverse backwards;
+
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes lineStart {
+
+    0% {
+
+        top: -268px;
+
+    }
+
+    100% {
+
+        top: 0px;
+
+    }
+
+}
+
+
+
+@keyframes profilePhoto {
+
+    0% {
+
+        margin-left: -500px;
+
+        opacity: 0;
+
+    }
+
+    100% {
+
+        margin-left: 0px;
+
+        opacity: 1;
+
+    }
+
+}
+
+
+
+@keyframes gamePhoto {
+
+    0% {
+
+        width: 0%;
+
+        max-width: 0px;
+
+        opacity: 0;
+
+    }
+
+    100% {
+
+        width: 100%;
+
+        max-width: 105px;
+
+        opacity: 1;
+
+    }
+
+}
+
+
+
+@keyframes streamerName {
+
+    0% {
+
+        margin-left: -335px;
+
+        opacity: 0;
+
+    }
+
+    100% {
+
+        margin-left: 0;
+
+        opacity: 1;
+
+    }
+
+}
+
+
+
+@keyframes gameName {
+
+    0% {
+
+        margin-left: 335px;
+
+        opacity: 0;
+
+    }
+
+    100% {
+
+        margin-left: 0;
+
+        opacity: 1;
+
+    }
+
 }
