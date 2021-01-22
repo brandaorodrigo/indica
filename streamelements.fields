@@ -15,7 +15,17 @@
         "type": "text",
         "label": "Frase",
         "group": "Configuração",
-        "value": "/me Conheça <user> que estava jogando <game>. Acesse <twitch>"
+        "value": "/me Conheça <name> que estava jogando <game>. Acesse <url>"
+    },
+    "raid": {
+        "type": "dropdown",
+        "label": "Indicar automático ao receber raid",
+        "group": "Configuração",
+        "value": "0",
+        "options": {
+            "0": "Não",
+            "1": "Sim"
+        }
     },
     "border_radius": {
         "type": "dropdown",
@@ -26,9 +36,7 @@
             "0": "0%",
             "5": "5%",
             "10": "10%",
-            "20": "20%",
             "30": "30%",
-            "40": "40%",
             "50": "50%"
         }
     },
@@ -48,7 +56,7 @@
         "type": "googleFont",
         "label": "Fonte",
         "group": "Fontes",
-        "value": "Roboto Mono"
+        "value": "Roboto"
     },
     "font_style_user": {
         "type": "dropdown",

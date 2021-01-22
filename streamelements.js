@@ -1,130 +1,126 @@
-let id, username,
-    token, command, phrase, phrase_game, phrase_raid,
-    border_radius, border_color_logo, border_color_game,
-    font, font_style_user, font_color_user, font_style_game, font_color_game,
-    empty = 1, overlay = []
+let id, token, command, phrase, raid, overlay = [], empty = 1
 
-window.addEventListener("onWidgetLoad", (obj) => {
-
-    // load html + css
-
-    document.head.insertAdjacentHTML("beforeend", "<link rel=\"stylesheet\" href=\"https://xt.art.br/twitch/streamelements.css\" />")
-    document.body.insertAdjacentHTML("beforeend", "<div id=\"container\" class=\"container\"><div class=\"images-group\"><img id=\"image_logo\"/><img id=\"image_game\"/></div><div class=\"texts\"><div id=\"name\"></div><div id=\"game\"></div></div></div>")
-
-    // native fields
-
+window.addEventListener("onWidgetLoad", function (obj) {
+    let data = obj.detail.fieldData
+    // chat
     id = obj.detail.channel.id
-    username = obj.detail.channel.username
-
-    // custom fields
-
-    token = obj.detail.fieldData.token ? obj.detail.fieldData.token : null
-
-    command = obj.detail.fieldData.command ? obj.detail.fieldData.command : SE_API.setField("command", "!indicar")
-    phrase = obj.detail.fieldData.phrase ? obj.detail.fieldData.phrase : SE_API.setField("phrase", "/me Conheça <name> que estava jogando <game>. Acesse <url>")
-    phrase_game = obj.detail.fieldData.phrase_game ? obj.detail.fieldData.phrase_game : SE_API.setField("phrase_game", "/me Conheça <name> que não estava jogando. Acesse <url>") // TODO = PENSAR SE ISSO É IMPORTANTE
-    phrase_raid = obj.detail.fieldData.phrase_raid ? obj.detail.fieldData.phrase_raid : SE_API.setField("phrase_raid", "/me Conheça <name> que estava jogando <game>. Acesse <url>") // TODO = PENSAR SE ISSO É IMPORTANTE
-
-    border_radius = obj.detail.fieldData.border_radius ? obj.detail.fieldData.border_radius : 0
-    border_color_user = obj.detail.fieldData.border_color_user ? obj.detail.fieldData.border_color_user : "#ffffff"
-    border_color_game = obj.detail.fieldData.border_color_game ? obj.detail.fieldData.border_color_game : "#ffffff"
-
-    font = obj.detail.fieldData.font ? obj.detail.fieldData.font : "Roboto" // TODO = QUAL VAI SER A FONTE PADRAO ?
-    font_style_user = obj.detail.fieldData.font_style_user ? obj.detail.fieldData.font_style_user : "700"
-    font_color_user = obj.detail.fieldData.font_color_user ? obj.detail.fieldData.font_color_user : "#ffffff"
-    font_style_game = obj.detail.fieldData.font_style_game ? obj.detail.fieldData.font_style_game : "400"
-    font_color_game = obj.detail.fieldData.font_color_game ? obj.detail.fieldData.font_color_game : "#ffffff"
-
-    // check
-
+    token = data.token ? data.token : null
+    command = data.command ? data.command : SE_API.setField("command", "!cu")
+    phrase = data.phrase ? data.phrase : SE_API.setField("phrase", "/me Conheça <name> que estava jogando <game>. Acesse <url>")
+    raid = data.raid ? data.raid : 0
+    // overlay
+    document.body.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=` + data.font.replace(" ", "+") + `"/>`)
+    document.body.insertAdjacentHTML("beforeend", `<link rel="stylesheet" href="https://xt.art.br/twitch/streamelements.css"/>`)
     if (!token) {
-        document.body.insertAdjacentHTML("beforeend", "<div style=\"position:absolute;left:0;top:0;width:100vw;height:100vh;z-index:9999;background:#f00;\">CADASTRE O JWT TOKEN</div>") // TODO = CRIAR HTML QUE EXPLICA O QUE FAZER NO JWT TOKEN
-    }
-
-    document.head.insertAdjacentHTML("beforeend", "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=" + font.replace(" ", "+") + "\" />")
-    document.querySelector("body").style.fontFamily = font
-
-    if (document.querySelector("#image_logo")) {
-        document.querySelector("#image_logo").style.borderRadius = border_radius + "%"
-        document.querySelector("#image_logo").style.borderColor = border_color_user
-    }
-
-    if (document.querySelector("#image_game")) {
-        if (border_radius > 25) {
-            document.querySelector("#image_game").style.height = "105px"
-            document.querySelector("#image_game").style.objectFit = "cover"
+        document.body.insertAdjacentHTML("beforeend", `
+        <div style="position:absolute;left:0;top:0;width:100vw;height:100vh;z-index:9999;background:#ff0;">
+            CADASTRE O JWT TOKEN
+        </div>`)
+    } else {
+        data.border_radius = data.border_radius ? data.border_radius : 0
+        data.border_color_user = data.border_color_user ? data.border_color_user : "#f2f2f2"
+        data.border_color_game = data.border_color_game ? data.border_color_game : "#f2f2f2"
+        data.font = data.font ? data.font : "Roboto"
+        data.font_style_user = data.font_style_user ? data.font_style_user : "700"
+        data.font_color_user = data.font_color_user ? data.font_color_user : "#f2f2f2"
+        data.font_style_game = data.font_style_game ? data.font_style_game : "400"
+        data.font_color_game = data.font_color_game ? data.font_color_game : "#f2f2f2"
+        // html + css
+        document.body.insertAdjacentHTML("beforeend", `
+        <div id="container" class="container">
+            <div class="images-group">
+                <img id="image_logo"/>
+                <img id="image_game"/>
+            </div>
+            <div class="texts">
+                <div id="name"></div>
+                <div id="game"></div>
+            </div>
+        </div>`)
+        document.querySelector("body").style.fontFamily = data.font
+        if (document.querySelector("#image_logo")) {
+            document.querySelector("#image_logo").style.borderRadius = data.border_radius + "%"
+            document.querySelector("#image_logo").style.borderColor = data.border_color_user
         }
-        document.querySelector("#image_game").style.borderRadius = border_radius + "%"
-        document.querySelector("#image_game").style.borderColor = border_color_game
-    }
-
-    if (document.querySelector("#name")) {
-        document.querySelector("#name").style.color = font_color_user
-        let check_font_user = font_style_user.split("_")
-        if (typeof check_font_user[1] !== "undefined") {
-            document.querySelector("#name").style.fontWeight = check_font_user[0]
-            document.querySelector("#name").style.fontStyle = check_font_user[1]
-        } else {
-            document.querySelector("#name").style.fontWeight = font_style_user
+        if (document.querySelector("#image_game")) {
+            if (data.border_radius > 25) {
+                document.querySelector("#image_game").style.height = "105px"
+                document.querySelector("#image_game").style.objectFit = "cover"
+            }
+            document.querySelector("#image_game").style.borderRadius = data.border_radius + "%"
+            document.querySelector("#image_game").style.borderColor = data.border_color_game
         }
-    }
-
-    if (document.querySelector("#game")) {
-        document.querySelector("#game").style.color = font_color_game
-        let check_font_game = font_style_game.split("_")
-        if (typeof check_font_game[1] !== "undefined") {
-            document.querySelector("#game").style.fontWeight = check_font_game[0]
-            document.querySelector("#game").style.fontStyle = check_font_game[1]
-        } else {
-            document.querySelector("#game").style.fontWeight = font_style_game
+        if (document.querySelector("#name")) {
+            document.querySelector("body").style.fontFamily = data.font
+            document.querySelector("#name").style.color = data.font_color_user
+            let check_font_user = data.font_style_user.split("_")
+            if (typeof check_font_user[1] !== "undefined") {
+                document.querySelector("#name").style.fontWeight = data.check_font_user[0]
+                document.querySelector("#name").style.fontStyle = data.check_font_user[1]
+            } else {
+                document.querySelector("#name").style.fontWeight = data.font_style_user
+            }
         }
-    }
-
-})
-
-window.addEventListener("onEventReceived", (obj) => {
-    if (obj.detail.event && obj.detail.listener === "message") {
-        let word = obj.detail.event.data.text.split(" ")
-        if (word[0] === command && typeof word[1] !== "undefined") {
-            let badges = obj.detail.event.data.tags.badges.replace(/\d+/g, "").replace(/,/g, "").split("/")
-            if (badges.indexOf("moderator") != -1 || badges.indexOf("broadcaster") != -1) {
-                fetch("https://xt.art.br/twitch/" + word[1] + "/" + username + "?d=" + Date.now())
-                .then((response) => {
-                    if (response.status != 200)
-                        throw new Error()
-                    return response.json()
-                })
-                .then((response) => {
-                    let message = phrase
-                    if (!response.game) {
-                        message = phrase_game
-                    }
-                    say(message, response)
-                    overlay.push(response)
-                    flow()
-                })
+        if (document.querySelector("#game")) {
+            document.querySelector("body").style.fontFamily = data.font
+            document.querySelector("#game").style.color = data.font_color_game
+            let check_font_game = data.font_style_game.split("_")
+            if (typeof check_font_game[1] !== "undefined") {
+                document.querySelector("#game").style.fontWeight = data.check_font_game[0]
+                document.querySelector("#game").style.fontStyle = data.check_font_game[1]
+            } else {
+                document.querySelector("#game").style.fontWeight = data.font_style_game
             }
         }
     }
-     // TODO = VERIFICAR SE É RAID E SE O PARAMETRO SE QUER ALERTAR RAID ESTA ATIVADO
 })
 
-const say = (message, response) => {
-    Object.keys(response).forEach((key) => {
-        message = message.replaceAll("<" + key + ">", response[key])
+window.addEventListener("onEventReceived", function (obj) {
+    if (obj.detail.event) {
+        let caller = obj.detail.event.data.channel
+        if (obj.detail.listener === "message") {
+            let word = obj.detail.event.data.text.split(" ")
+            if (word[0] === command && typeof word[1] !== "undefined") {
+                let badges = obj.detail.event.data.tags.badges.replace(/\d+/g, "").replace(/,/g, "").split("/")
+                if (badges.indexOf("moderator") != -1 || badges.indexOf("broadcaster") != -1) {
+                    run(word[1], caller)
+                }
+            }
+        }
+        if (obj.detail.listener === "raid-latest" && raid) {
+            run(obj.detail.event.data.name, caller)
+        }
+    }
+})
+
+function run(channel, caller) {
+    fetch("https://xt.art.br/twitch/" + channel + "/" + caller + "?v=" + Date.now())
+    .then(function(response) {
+        if (response.status != 200) {
+            throw new Error()
+        }
+        return response.json()
     })
-    fetch("https://api.streamelements.com/kappa/v2/bot/" + id + "/say", {
-        "method": "POST",
-        "headers": {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-        },
-        "body": JSON.stringify({ "message": message })
+    .then(function(response) {
+        overlay.push(response)
+        flow()
+        let message = phrase
+        Object.keys(response).forEach(function(key) {
+            message = message.replace("<" + key + ">", response[key])
+        })
+        fetch("https://api.streamelements.com/kappa/v2/bot/" + id + "/say", {
+            "method": "POST",
+            "headers": {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            "body": JSON.stringify({ "message": message })
+        })
     })
 }
 
-const flow = () => {
+function flow() /* overlay, empty */ {
     if (empty && overlay.length) {
         empty = 0
         let current = overlay.shift()
@@ -132,11 +128,11 @@ const flow = () => {
         setTimeout(() => {
             empty = 1
             flow()
-        }, 22000)
+        }, 20000)
     }
 }
 
-const show = (current) => {
+function show(current) {
     Object.keys(current).forEach((key) => {
         if (document.querySelector("#" + key)) {
             if (key.substring(0, 5) == "image") {
@@ -146,10 +142,29 @@ const show = (current) => {
             }
         }
     })
+    let container = document.querySelector("#container")
     setTimeout(() => {
-        document.querySelector("#container").classList.add("active")
+        addCssClass(container, "active")
         setTimeout(() => {
-            document.querySelector("#container").classList.remove("active")
-        }, 20000)
+            removeCssClass(container, "active")
+        }, 15000)
     }, 1000)
+}
+
+function addCssClass(element, classname) {
+    if (element.classList) {
+        element.classList.add(classname)
+    } else {
+        element.className += " " + classname
+    }
+}
+
+function removeCssClass(element, classname) {
+    if (element.classList) {
+        element.classList.remove(classname)
+    } else {
+        classname = classname.split(" ").join("|")
+        let reg = new RegExp("(^|\\b)" + classname + "(\\b|$)", "gi")
+        element.className = element.className.replace(reg, " ")
+    }
 }
