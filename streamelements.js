@@ -25,12 +25,17 @@ window.addEventListener("onWidgetLoad", function (obj) {
         data.font_color_user = data.font_color_user ? data.font_color_user : "#f2f2f2"
         data.font_style_game = data.font_style_game ? data.font_style_game : "400"
         data.font_color_game = data.font_color_game ? data.font_color_game : "#f2f2f2"
+        data.shadow_color = data.shadow_color ? data.shadow_color : "rgba(150, 150, 150, 1)"
         // html + css
         document.body.insertAdjacentHTML("beforeend", `
         <div id="container" class="container">
             <div class="images-group">
-                <img id="image_logo"/>
-                <img id="image_game"/>
+				<div id="image_logo_container" class="shine_box">
+                	<img id="image_logo"/>
+                </div>
+                <div id="image_game_container" class="shine_box">
+                	<img id="image_game"/>
+                </div>
             </div>
             <div class="texts">
                 <div id="name"></div>
@@ -38,21 +43,23 @@ window.addEventListener("onWidgetLoad", function (obj) {
             </div>
         </div>`)
         document.querySelector("body").style.fontFamily = data.font
-        if (document.querySelector("#image_logo")) {
-            document.querySelector("#image_logo").style.borderRadius = data.border_radius + "%"
-            document.querySelector("#image_logo").style.borderColor = data.border_color_user
+        if (document.querySelector("#image_logo_container")) {
+            document.querySelector("#image_logo_container").style.borderRadius = data.border_radius + "%"
+            document.querySelector("#image_logo_container").style.borderColor = data.border_color_user
         }
-        if (document.querySelector("#image_game")) {
+        if (document.querySelector("#image_game_container")) {
             if (data.border_radius > 25) {
-                document.querySelector("#image_game").style.height = "105px"
-                document.querySelector("#image_game").style.objectFit = "cover"
+                document.querySelector("#image_game_container").style.height = "105px"
+                document.querySelector("#image_game_container").style.maxHeight = "105px"
+                document.querySelector("#image_game_container").style.objectFit = "cover"
             }
-            document.querySelector("#image_game").style.borderRadius = data.border_radius + "%"
-            document.querySelector("#image_game").style.borderColor = data.border_color_game
+            document.querySelector("#image_game_container").style.borderRadius = data.border_radius + "%"
+            document.querySelector("#image_game_container").style.borderColor = data.border_color_game
         }
         if (document.querySelector("#name")) {
             document.querySelector("body").style.fontFamily = data.font
             document.querySelector("#name").style.color = data.font_color_user
+            document.querySelector("#name").style.textShadow = "-2px 2px 4px "+data.shadow_color
             let check_font_user = data.font_style_user.split("_")
             if (typeof check_font_user[1] !== "undefined") {
                 document.querySelector("#name").style.fontWeight = data.check_font_user[0]
@@ -64,6 +71,7 @@ window.addEventListener("onWidgetLoad", function (obj) {
         if (document.querySelector("#game")) {
             document.querySelector("body").style.fontFamily = data.font
             document.querySelector("#game").style.color = data.font_color_game
+            document.querySelector("#game").style.textShadow = "-2px 2px 4px "+data.shadow_color
             let check_font_game = data.font_style_game.split("_")
             if (typeof check_font_game[1] !== "undefined") {
                 document.querySelector("#game").style.fontWeight = data.check_font_game[0]

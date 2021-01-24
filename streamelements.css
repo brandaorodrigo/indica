@@ -1,317 +1,228 @@
-*{
-
+* {
     transform-style: preserve-3d;
-
 }
 
 body {
-
     overflow: hidden;
-
     background: transparent;
-
     padding: 0px;
-
     margin: 0px;
-
 }
-
-
 
 .container {
-
     position: relative;
-
     max-width: 335px;
-
-    max-height: 365px;
-
+    min-height: 365px;
     overflow: hidden;
-
     display: none;
-
     transition: 2s ease-in-out;
-
 }
-
-
 
 .container .images-group {
-
     position: relative;
-
     border-left: 4px solid #fff;
-
     padding: 0px 0px 0px 10px;
-
     max-height: 268px;
-
 }
 
-
-
-.container #image_logo {
-
+.container .images-group #image_logo_container {
     border: 4px solid #fff;
-
     width: 100%;
-
     max-width: 260px;
-
-    height: auto;
-
+    height: 260px;
+    overflow: hidden;
 }
 
-
-
-.container #image_game {
-
+.container .images-group #image_game_container {
     border: 4px solid #fff;
-
     width: 100%;
-
     max-width: 105px;
-
-    height: auto;
-
+    height: 140px;
     position: absolute;
-
     bottom: 10px;
-
     right: 0px;
-
+    overflow: hidden;
 }
 
-
+.container #image_logo,
+.container #image_game {
+    width: 100%;
+    background: #0e0e10;
+    object-fit: cover;
+}
 
 .container .texts {
-
     text-transform: uppercase;
-
     padding: 10px 0 0 0;
-
     min-height: 85px;
-
     height: auto;
-
 }
-
-
 
 .container .texts #name {
-
     opacity: 0;
-
     color: #fff;
-
     font-weight: 700;
-
     width: 100%;
-
     text-align: right;
-
     font-size: 40px;
-
+    text-shadow: -2px 2px 4px rgba(150, 150, 150, 1);
 }
-
-
 
 .container .texts #game {
-
     opacity: 0;
-
     color: #fff;
-
     font-weight: 700;
-
     width: 100%;
-
     text-align: right;
-
     font-size: 22px;
-
+    text-shadow: -2px 2px 4px rgba(150, 150, 150, 1);
 }
 
-
-
-/*Start Animation*/
-
-.container.active{
-
+/*Animation Properties*/
+.container.active {
     display: block;
-
 }
 
-
-
-.active .images-group{
-
+.active .images-group {
     overflow: hidden;
-
     top: -268px;
-
     animation: lineStart .5s linear 0s forwards, lineStart .5s linear 14.5s alternate-reverse backwards;
-
     animation-fill-mode: forwards;
-
 }
 
+/*Shine*/
+.active .shine_box {
+    position: relative;
+}
 
+.active .shine_box:before {
+    content: "";
+    z-index: 10;
+    position: absolute;
+    height: 200%;
+    width: 200%;
+    top: -120%;
+    left: -120%;
+    background: linear-gradient(transparent 0%, rgba(255, 255, 255, 0.1) 45%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.1) 55%, transparent 100%);
+    transition: all 2s;
+    transform: rotate(-45deg);
+}
 
-.active #image_logo{
+.active #image_logo_container:before {
+    animation: shine 5s infinite forwards;
+}
 
+.active #image_game_container:before {
+    animation: shine 5s infinite forwards 5.13s;
+}
+
+.active #image_logo_container {
     margin-left: -500px;
-
     opacity: 0;
-
     animation: profilePhoto .5s linear .8s forwards, profilePhoto .5s linear 14s alternate-reverse backwards;
-
     animation-fill-mode: forwards;
-
 }
 
-
-
-.active #image_game{
-
+.active #image_game_container {
     width: 0px;
-
+    max-height: 140px;
     opacity: 0;
-
     animation: gamePhoto .4s linear 1s forwards, gamePhoto .4s linear 14s alternate-reverse backwards;
-
     animation-fill-mode: forwards;
-
 }
 
-
-
-.active .texts #name{
-
+.active .texts #name {
     margin-left: -335px;
-
     animation: streamerName .9s ease-in-out 1s forwards, streamerName .9s ease-in-out 14s alternate-reverse backwards;
-
     animation-fill-mode: forwards;
-
 }
 
-
-
-.active .texts #game{
-
+.active .texts #game {
     margin-left: 335px;
-
-    animation: gameName .9s ease-in-out 1s forwards,  gameName .9s ease-in-out 14s alternate-reverse backwards;
-
+    animation: gameName .9s ease-in-out 1s forwards, gameName .9s ease-in-out 14s alternate-reverse backwards;
     animation-fill-mode: forwards;
-
 }
 
 @keyframes lineStart {
-
     0% {
-
         top: -268px;
-
     }
 
     100% {
-
         top: 0px;
-
     }
-
 }
-
-
 
 @keyframes profilePhoto {
-
     0% {
-
         margin-left: -500px;
-
         opacity: 0;
-
     }
 
     100% {
-
         margin-left: 0px;
-
         opacity: 1;
-
     }
-
 }
-
-
 
 @keyframes gamePhoto {
-
     0% {
-
         width: 0%;
-
         max-width: 0px;
-
+        height: 0;
         opacity: 0;
-
     }
 
     100% {
-
         width: 100%;
-
         max-width: 105px;
-
         opacity: 1;
-
     }
-
 }
-
-
 
 @keyframes streamerName {
-
     0% {
-
         margin-left: -335px;
-
         opacity: 0;
-
     }
 
     100% {
-
         margin-left: 0;
-
         opacity: 1;
-
     }
-
 }
 
-
-
 @keyframes gameName {
-
     0% {
-
         margin-left: 335px;
-
         opacity: 0;
-
     }
 
     100% {
-
         margin-left: 0;
-
         opacity: 1;
+    }
+}
 
+/*Shine*/
+@keyframes shine {
+    0% {
+        top: -120%;
+        left: -120%;
     }
 
+    20% {
+        left: 100%;
+        top: 100%;
+    }
+
+    40% {
+        left: 100%;
+        top: 100%;
+    }
+
+    100% {
+        left: 100%;
+        top: 100%;
+    }
 }

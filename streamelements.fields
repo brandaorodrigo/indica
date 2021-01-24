@@ -97,5 +97,11 @@
         "label": "Cor da fonte do nome do jogo",
         "group": "Fontes",
         "value": "rgba(255, 255, 255, 1)"
+    },
+    "shadow_color": {
+        "type": "colorpicker",
+        "label": "Cor da sombra do texto",
+        "group": "Fontes",
+        "value": "rgba(150, 150, 150, 1)"
     }
 }
