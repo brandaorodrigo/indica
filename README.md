@@ -4,20 +4,24 @@
 !indica é uma ferramenta totalmente customizável e de
 código aberto para você poder indicar seus amigos streamers.
 
-# comando para chatbots
+# comando
 
 ### streamelements
 
-    /me Conheça o canal de @${user ${1}} que estava jogando ${game ${1}}. Acesse: http://twitch.tv/${user.name ${1}}
+    /me Conheça ${user ${1}} que estava jogando ${game ${1}}. Acesse http://twitch.tv/${user.name ${1}}
 
-### streamlabs
+### streamlabs | cloudbot
 
-    /me Conheça o canal de @{touser.name} que estava jogando {touser.game}. Acesse http://twitch.tv/{touser.name}
+    /me Conheça {touser.name} que estava jogando {touser.game}. Acesse http://twitch.tv/{touser.name}
+
+
+### streamlabs | chatbot
+
+    /me Conheça $touser que estava jogando $game. Acesse https://twitch.tv/$touser
 
 ### nightbot
 
-    /me Conheça o canal de @$(twitch $(touser) "{{displayName}}") que estava jogando $(twitch $(touser) "{{game}}"). Acesse http://twitch.tv/$(twitch $(touser) "{{name}}")
-
+    /me Conheça o canal de $(twitch $(touser) "{{displayName}}") que estava jogando $(twitch $(touser) "{{game}}"). Acesse http://twitch.tv/$(twitch $(touser) "{{name}}")
 
 ### mixitup
 
@@ -31,7 +35,8 @@ código aberto para você poder indicar seus amigos streamers.
 
 ### html
 
-    <script  src="https://xt.art.br/overlay"></script>
+    <link href="https://xt.art.br/indica/overlay.css" rel="stylesheet"/><br>
+    <script src="https://xt.art.br/indica/overlay.js"></script>
 
 ### css
 

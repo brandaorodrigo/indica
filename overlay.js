@@ -1,4 +1,6 @@
-let custom, overlay = [], empty = 1
+let custom,
+    overlay = [],
+    empty = 1
 
 function css_pre() /* custom */ {
     document.body.insertAdjacentHTML("beforeend", `
@@ -60,7 +62,8 @@ function css_pre() /* custom */ {
 }
 
 function css_pos() {
-    let name = document.querySelector("#name"), name_font_size
+    let name = document.querySelector("#name"),
+        name_font_size
     if (name.textContent.length < 8) {
         name_font_size = "40px"
     } else if (name.textContent.length < 12) {
@@ -77,14 +80,15 @@ function css_pos() {
         name_font_size = "8px"
     }
     name.style.fontSize = name_font_size
-    let game = document.getElementById("game"), game_font_size
+    let game = document.getElementById("game"),
+        game_font_size
     if (game.textContent.length < 21) {
         game_font_size = "22px"
-    } else if(game.textContent.length < 25) {
+    } else if (game.textContent.length < 25) {
         game_font_size = "17px"
-    } else if(game.textContent.length < 31) {
+    } else if (game.textContent.length < 31) {
         game_font_size = "15px"
-    } else if(game.textContent.length > 30) {
+    } else if (game.textContent.length > 30) {
         game_font_size = "12px"
     }
     game.style.fontSize = game_font_size
@@ -142,7 +146,7 @@ function remove_css_class(element, classname) {
 
 /* listeners */
 
-window.addEventListener("onWidgetLoad", function (obj) {
+window.addEventListener("onWidgetLoad", function(obj) {
     custom = obj.detail.fieldData
     custom.command = custom.command ? custom.command : SE_API.setField("command", "!indica")
     custom.font = custom.font ? custom.font : SE_API.setField("font", "Roboto")
@@ -158,7 +162,7 @@ window.addEventListener("onWidgetLoad", function (obj) {
     css_pre()
 })
 
-window.addEventListener("onEventReceived", function (obj) /* custom */ {
+window.addEventListener("onEventReceived", function(obj) /* custom */ {
     if (obj.detail.event && obj.detail.listener === "message") {
         let caller = obj.detail.event.data.channel
         let word = obj.detail.event.data.text.split(" ")
@@ -166,16 +170,16 @@ window.addEventListener("onEventReceived", function (obj) /* custom */ {
             let badges = obj.detail.event.data.tags.badges.replace(/\d+/g, "").replace(/,/g, "").split("/")
             if (badges.indexOf("moderator") != -1 || badges.indexOf("broadcaster") != -1) {
                 fetch("https://xt.art.br/indica/api/" + word[1] + "/" + caller + "?" + Date.now())
-                .then(function(response) {
-                    if (response.status != 200) {
-                        throw new Error()
-                    }
-                    return response.json()
-                })
-                .then(function(response) {
-                    overlay.push(response)
-                    flow()
-                })
+                    .then(function(response) {
+                        if (response.status != 200) {
+                            throw new Error()
+                        }
+                        return response.json()
+                    })
+                    .then(function(response) {
+                        overlay.push(response)
+                        flow()
+                    })
             }
         }
     }

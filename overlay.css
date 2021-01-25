@@ -78,7 +78,9 @@ body {
     text-shadow: -2px 2px 4px rgba(150, 150, 150, 1);
 }
 
-/*Animation Properties*/
+
+/* animation properties */
+
 .container.active {
     display: block;
 }
@@ -90,7 +92,9 @@ body {
     animation-fill-mode: forwards;
 }
 
-/*Shine*/
+
+/* shine */
+
 .active .shine_box {
     position: relative;
 }
@@ -147,7 +151,6 @@ body {
     0% {
         top: -268px;
     }
-
     100% {
         top: 0px;
     }
@@ -158,7 +161,6 @@ body {
         margin-left: -500px;
         opacity: 0;
     }
-
     100% {
         margin-left: 0px;
         opacity: 1;
@@ -172,7 +174,6 @@ body {
         height: 0;
         opacity: 0;
     }
-
     100% {
         width: 100%;
         max-width: 105px;
@@ -185,7 +186,6 @@ body {
         margin-left: -335px;
         opacity: 0;
     }
-
     100% {
         margin-left: 0;
         opacity: 1;
@@ -197,30 +197,28 @@ body {
         margin-left: 335px;
         opacity: 0;
     }
-
     100% {
         margin-left: 0;
         opacity: 1;
     }
 }
 
-/*Shine*/
+
+/* shine */
+
 @keyframes shine {
     0% {
         top: -120%;
         left: -120%;
     }
-
     20% {
         left: 100%;
         top: 100%;
     }
-
     40% {
         left: 100%;
         top: 100%;
     }
-
     100% {
         left: 100%;
         top: 100%;
