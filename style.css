@@ -346,3 +346,22 @@ section span {
     visibility: visible;
     opacity: 1;
 }
+
+/*Copy alert*/
+#alert-copy{
+    position: fixed;
+    margin: 0px;
+    padding: 10px;
+    background: #edfbf6;
+    color: #32d296;
+    max-width: 320px;
+    width: auto;
+    bottom: 10px;
+    left: 10px;
+    display: none;
+}
+#alert-copy p{
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+}

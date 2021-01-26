@@ -37,34 +37,34 @@
                 Escolha e copie o comando de acordo com o bot que você utiliza em seu canal.
 
                 <h3>STREAMELEMENTS</h3>
-                <section id="streamelements">
+                <section id="streamelements" class="copy">
                     /me Conheça ${user ${1}} que estava jogando ${game ${1}}. Acesse https://twitch.tv/${user.name ${1}}
                 </section>
 
                 <h3>STREAMLABS | CLOUDBOT</h3>
-                <section id="streamlabs_cloudbot">
+                <section id="streamlabs_cloudbot" class="copy">
                 /me Conheça {touser.name} que estava jogando {touser.game}. Acesse https://twitch.tv/{touser.name}
                 </section>
 
                 <h3>STREAMLABS | CHATBOT</h3>
-                <section id="streamlabs_chatbot">
+                <section id="streamlabs_chatbot" class="copy">
                 /me Conheça $touser que estava jogando $game. Acesse https://twitch.tv/$touser
                 </section>
 
 
                 <h3>NIGHTBOT</h3>
-                <section id="nightbot">
+                <section id="nightbot" class="copy">
                 /me Conheça $(twitch $(touser) "{{displayName}}") que estava jogando $(twitch $(touser) "{{game}}"). Acesse https://twitch.tv/$(twitch $(touser) "{{name}}")
                 </section>
 
                 <!--
                 <label>MIX IT UP</label>
-                <section id="mixitup">
+                <section id="mixitup" class="copy">
                 /me Conheça $arg1username que estava jogando $arg1userstreamgame. Acesse https://twitch.tv/$arg1username
                 </section>
 
                 <label>FIREBOT</label>
-                <section id="firebot">
+                <section id="firebot" class="copy">
                 /me Conheça $target que estava jogando $game[$target]. Acesse https://twitch.tv/$target
                 </section>
                 -->
@@ -72,7 +72,7 @@
                 <h2>OVERLAY PARA STREAMELEMENTS (CRIE UM CUSTOM WIDGET E CLIQUE EM OPEN EDITOR)</h2>
 
                 <h3>HTML</h3>
-                <section>
+                <section id="html" class="copy">
                     &lt;link href="https://xt.art.br/indica/overlay.css" rel="stylesheet"/&gt;<br>
                     &lt;script src="https://xt.art.br/indica/overlay.js"&gt;&lt;/script&gt;
                 </section>
@@ -88,7 +88,7 @@
                 </section>
 
                 <h3>FIELDS</h3>
-                <section>
+                <section id="fields" class="copy">
                 {
                     "command": {
                         "type": "text",
@@ -204,11 +204,6 @@
             player_aspect()
             */
 
-            document.querySelector(".copy").addEventListener("click", function() {
-                this.select()
-                document.execCommand('copy')
-            })
-
             let bot = {
                 "streamelements": {
                     "name": "${user ${1}}",
@@ -261,6 +256,28 @@
                 }
                 update()
             })
+
+            /*Copy Command and Alert*/
+            document.addEventListener('click', function(e) {
+                e = e || window.event;
+                var target = e.target;
+                if(target.className == "copy"){
+                    copyToClipboard(target.id);
+                    document.getElementById("alert-copy").style.display = "block";
+                    setTimeout(function(){
+                        document.getElementById("alert-copy").style.display = "none";
+                    }, 1500);
+                }
+            }, false);
+
+            function copyToClipboard(e) {
+                var range = document.createRange();
+                range.selectNode(document.getElementById(e));
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand("copy");
+                window.getSelection().removeAllRanges();
+            }
 
         </script>
     </body>
