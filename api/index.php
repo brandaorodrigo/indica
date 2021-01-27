@@ -82,7 +82,7 @@ $json = [
 // log
 
 /*
-CREATE TABLE IF NOT EXISTS `log_indicador` (
+CREATE TABLE IF NOT EXISTS `indica` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `channel` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
     `game` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `log_indicador` (
 
 $pdo = new PDO('mysql:host=' . $db_host .';dbname=' . $db_base, $db_user, $db_pass);
 $sql =
-"INSERT INTO `log_indicador` (
+"INSERT INTO `indica` (
     `channel`,
     `game`,
     `caller`,

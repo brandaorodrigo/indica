@@ -17,9 +17,9 @@ function select($sql) {
 
 $pdo = new PDO('mysql:host=' . $db_host .';dbname=' . $db_base, $db_user, $db_pass);
 
-$qtd_indica = select("SELECT count(*) AS qtd FROM `log_indicador`");
-$streamer_usando = select("SELECT * FROM (SELECT `caller` AS canal, count(*) AS qtd FROM `log_indicador` GROUP BY `caller`) sub ORDER BY sub.qtd DESC");
-$streamer_indicado = select("SELECT * FROM (SELECT channel AS canal, count(*) AS qtd FROM `log_indicador` GROUP BY channel) sub ORDER BY sub.qtd DESC");
+$qtd_indica = select("SELECT count(*) AS qtd FROM `indica`");
+$streamer_usando = select("SELECT * FROM (SELECT `caller` AS canal, count(*) AS qtd FROM `indica` GROUP BY `caller`) sub ORDER BY sub.qtd DESC");
+$streamer_indicado = select("SELECT * FROM (SELECT channel AS canal, count(*) AS qtd FROM `indica` GROUP BY channel) sub ORDER BY sub.qtd DESC");
 
 ?><!DOCTYPE html>
 <html>
@@ -76,7 +76,7 @@ $streamer_indicado = select("SELECT * FROM (SELECT channel AS canal, count(*) AS
     <table>
     <tr><th>#</th><th>CANAL</th><th>QTD</th></tr>
     <?php foreach ($streamer_usando as $i => $s) : ?>
-        <tr><td><?php echo $i + 1?></td><td><a href="https://twitch.tv/<?php echo $s->canal ?>"><?php echo $s->canal ?></a></td><td><?php echo $s->qtd ?></td></tr>
+        <tr><td><?php echo $i + 1?></td><td><a target="_blank" href="https://twitch.tv/<?php echo $s->canal ?>"><?php echo $s->canal ?></a></td><td><?php echo $s->qtd ?></td></tr>
     <?php endforeach ?>
     </table>
     </div>
@@ -85,7 +85,7 @@ $streamer_indicado = select("SELECT * FROM (SELECT channel AS canal, count(*) AS
     <table>
     <tr><th>#</th><th>CANAL</th><th>QTD</th></tr>
     <?php foreach ($streamer_indicado as $i => $s) : ?>
-        <tr><td><?php echo $i + 1 ?></td><td><a href="https://twitch.tv/<?php echo $s->canal ?>"><?php echo $s->canal ?></a></td><td><?php echo $s->qtd ?></td></tr>
+        <tr><td><?php echo $i + 1 ?></td><td><a target="_blank" href="https://twitch.tv/<?php echo $s->canal ?>"><?php echo $s->canal ?></a></td><td><?php echo $s->qtd ?></td></tr>
     <?php endforeach ?>
     </table>
     </div>

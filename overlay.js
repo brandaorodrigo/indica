@@ -166,7 +166,7 @@ window.addEventListener("onEventReceived", function(obj) /* custom */ {
     if (obj.detail.event && obj.detail.listener === "message") {
         let caller = obj.detail.event.data.channel
         let word = obj.detail.event.data.text.split(" ")
-        if (word[0] === custom.command && typeof word[1] !== "undefined") {
+        if (word[0].toLowerCase() == custom.command.toLowerCase() && typeof word[1] !== "undefined") {
             let badges = obj.detail.event.data.tags.badges.replace(/\d+/g, "").replace(/,/g, "").split("/")
             if (badges.indexOf("moderator") != -1 || badges.indexOf("broadcaster") != -1) {
                 fetch("https://xt.art.br/indica/api/" + word[1] + "/" + caller + "?" + Date.now())
