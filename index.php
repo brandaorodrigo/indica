@@ -40,22 +40,26 @@
                 <section id="streamelements" class="copy">
                     /me Conheça ${user ${1}} que estava jogando ${game ${1}}. Acesse https://twitch.tv/${user.name ${1}}
                 </section>
+                <video src="bot_streamelements.webm" autoplay loop controls tabindex="0" style="padding-top:50px;width:auto;height:80vh;"></video>
 
                 <h3>STREAMLABS | CLOUDBOT</h3>
                 <section id="streamlabs_cloudbot" class="copy">
                 /me Conheça {touser.name} que estava jogando {touser.game}. Acesse https://twitch.tv/{touser.name}
                 </section>
+                <video src="bot_streamlabs-cloudbot.webm" autoplay loop controls tabindex="0" style="padding-top:50px;width:auto;height:80vh;"></video>
 
                 <h3>STREAMLABS | CHATBOT</h3>
                 <section id="streamlabs_chatbot" class="copy">
                 /me Conheça $touser que estava jogando $game. Acesse https://twitch.tv/$touser
                 </section>
-
+                <video src="bot_streamlabs-chatbot.webm" autoplay loop controls tabindex="0" style="padding-top:50px;width:auto;height:80vh;"></video>
 
                 <h3>NIGHTBOT</h3>
                 <section id="nightbot" class="copy">
                 /me Conheça $(twitch $(touser) "{{displayName}}") que estava jogando $(twitch $(touser) "{{game}}"). Acesse https://twitch.tv/$(twitch $(touser) "{{name}}")
                 </section>
+
+                <video src="bot_nightbot.webm" autoplay loop controls tabindex="0" style="padding-top:50px;width:auto;height:80vh;"></video>
 
                 <!--
                 <label>MIX IT UP</label>
@@ -73,8 +77,7 @@
 
                 <h3>HTML</h3>
                 <section id="html" class="copy">
-                    &lt;link href="https://xt.art.br/indica/overlay.css" rel="stylesheet"/&gt;<br>
-                    &lt;script src="https://xt.art.br/indica/overlay.js"&gt;&lt;/script&gt;
+                    &lt;script src="https://xt.art.br/indica/overlay"&gt;&lt;/script&gt;
                 </section>
 
                 <h3>CSS</h3>
@@ -84,7 +87,7 @@
 
                 <h3>JS</h3>
                 <section>
-                    <span>(apagar tudo e deixar vazio)</span>
+                    $.getScript("https://xt.art.br/indica/overlay/" + Date.now())
                 </section>
 
                 <h3>FIELDS</h3>
@@ -96,62 +99,10 @@
                         "group": "Comando",
                         "value": "!indica"
                     },
-                    "font": {
-                        "type": "googleFont",
-                        "label": "Fonte",
-                        "group": "Fontes",
-                        "value": "Roboto"
-                    },
-                    "font_style_user": {
-                        "type": "dropdown",
-                        "label": "Estilo da fonte do nome do streamer",
-                        "group": "Fontes",
-                        "value": "700",
-                        "options": {
-                            "400": "Normal",
-                            "700": "Negrito",
-                            "900": "Black",
-                            "400_italic": "Normal Itálico",
-                            "700_italic": "Negrito Itálico",
-                            "900_italic": "Black Itálico"
-                        }
-                    },
-                    "font_color_user": {
-                        "type": "colorpicker",
-                        "label": "Cor da fonte do nome do streamer",
-                        "group": "Fontes",
-                        "value": "#ffffff"
-                    },
-                    "font_style_game": {
-                        "type": "dropdown",
-                        "label": "Estilo da fonte do nome do jogo",
-                        "group": "Fontes",
-                        "value": "400",
-                        "options": {
-                            "400": "Normal",
-                            "700": "Negrito",
-                            "900": "Black",
-                            "400_italic": "Normal Itálico",
-                            "700_italic": "Negrito Itálico",
-                            "900_italic": "Black Itálico"
-                        }
-                    },
-                    "font_color_game": {
-                        "type": "colorpicker",
-                        "label": "Cor da fonte do nome do jogo",
-                        "group": "Fontes",
-                        "value": "#ffffff"
-                    },
-                    "shadow_color": {
-                        "type": "colorpicker",
-                        "label": "Cor da sombra do texto",
-                        "group": "Fontes",
-                        "value": "#888888"
-                    },
                     "border_radius": {
                         "type": "dropdown",
-                        "label": "Arredondar bordas",
-                        "group": "Bordas",
+                        "label": "Arredondamento",
+                        "group": "Geral",
                         "value": "0",
                         "options": {
                             "0": "0%",
@@ -161,23 +112,100 @@
                             "50": "50%"
                         }
                     },
-                    "border_color_user": {
-                        "type": "colorpicker",
-                        "label": "Cor da borda da foto do streamer",
-                        "group": "Bordas",
-                        "value": "#ffffff"
+                    "animation_time": {
+                        "type": "dropdown",
+                        "label": "Tempo da exibição",
+                        "group": "Geral",
+                        "value": "14",
+                        "options": {
+                            "10": "10 segundos",
+                            "15": "15 segundos",
+                            "20": "20 segundos"
+                        }
                     },
-                    "border_color_game": {
+                    "font": {
+                        "type": "googleFont",
+                        "label": "Fonte",
+                        "group": "Geral",
+                        "value": "Roboto"
+                    },
+                    "shadow_color": {
                         "type": "colorpicker",
-                        "label": "Cor da borda da capa do jogo",
-                        "group": "Bordas",
-                        "value": "#ffffff"
+                        "label": "Sombra",
+                        "group": "Geral",
+                        "value": "#888888"
                     },
                     "border_color_line": {
                         "type": "colorpicker",
-                        "label": "Cor da linha lateral",
-                        "group": "Bordas",
-                        "value": "#ffffff"
+                        "label": "Cor da linha",
+                        "group": "Geral",
+                        "value": "#f4f4f4"
+                    },
+                    "border_color_name": {
+                        "type": "colorpicker",
+                        "label": "Cor da borda",
+                        "group": "Nome",
+                        "value": "#f4f4f4"
+                    },
+                    "font_color_name": {
+                        "type": "colorpicker",
+                        "label": "Cor da fonte",
+                        "group": "Nome",
+                        "value": "#f4f4f4"
+                    },
+                    "font_weight_name": {
+                        "type": "dropdown",
+                        "label": "Estilo da fonte",
+                        "group": "Nome",
+                        "value": "400",
+                        "options": {
+                            "400": "Normal",
+                            "700": "Negrito",
+                            "900": "Black"
+                        }
+                    },
+                    "font_style_name": {
+                        "type": "dropdown",
+                        "label": "Itálico",
+                        "group": "Nome",
+                        "value": "normal",
+                        "options": {
+                            "normal": "Não",
+                            "italic": "Sim"
+                        }
+                    },
+                    "border_color_game": {
+                        "type": "colorpicker",
+                        "label": "Cor da borda",
+                        "group": "Jogo",
+                        "value": "#f4f4f4"
+                    },
+                    "font_color_game": {
+                        "type": "colorpicker",
+                        "label": "Cor da fonte",
+                        "group": "Jogo",
+                        "value": "#f4f4f4"
+                    },
+                    "font_weight_game": {
+                        "type": "dropdown",
+                        "label": "Estilo da fonte",
+                        "group": "Jogo",
+                        "value": "400",
+                        "options": {
+                            "400": "Normal",
+                            "700": "Negrito",
+                            "900": "Black"
+                        }
+                    },
+                    "font_style_game": {
+                        "type": "dropdown",
+                        "label": "Itálico",
+                        "group": "Jogo",
+                        "value": "normal",
+                        "options": {
+                            "normal": "Não",
+                            "italic": "Sim"
+                        }
                     }
                 }
                 </section>

@@ -1,8 +1,17 @@
-
 # !indica
 
 !indica é uma ferramenta totalmente customizável e de
 código aberto para você poder indicar seus amigos streamers.
+
+## site oficial
+
+https://xt.art.br/indica
+
+## desenvolvido por
+
+- rodrigo brandão
+- lucas linhares
+- sony linhares
 
 # comando
 
@@ -35,8 +44,7 @@ código aberto para você poder indicar seus amigos streamers.
 
 ### html
 
-    <link href="https://xt.art.br/indica/overlay.css" rel="stylesheet"/><br>
-    <script src="https://xt.art.br/indica/overlay.js"></script>
+    <script src="https://xt.art.br/indica/overlay/"></script>
 
 ### css
 
@@ -55,62 +63,10 @@ código aberto para você poder indicar seus amigos streamers.
             "group": "Comando",
             "value": "!indica"
         },
-        "font": {
-            "type": "googleFont",
-            "label": "Fonte",
-            "group": "Fontes",
-            "value": "Roboto"
-        },
-        "font_style_user": {
-            "type": "dropdown",
-            "label": "Estilo da fonte do nome do streamer",
-            "group": "Fontes",
-            "value": "700",
-            "options": {
-                "400": "Normal",
-                "700": "Negrito",
-                "900": "Black",
-                "400_italic": "Normal Itálico",
-                "700_italic": "Negrito Itálico",
-                "900_italic": "Black Itálico"
-            }
-        },
-        "font_color_user": {
-            "type": "colorpicker",
-            "label": "Cor da fonte do nome do streamer",
-            "group": "Fontes",
-            "value": "#ffffff"
-        },
-        "font_style_game": {
-            "type": "dropdown",
-            "label": "Estilo da fonte do nome do jogo",
-            "group": "Fontes",
-            "value": "400",
-            "options": {
-                "400": "Normal",
-                "700": "Negrito",
-                "900": "Black",
-                "400_italic": "Normal Itálico",
-                "700_italic": "Negrito Itálico",
-                "900_italic": "Black Itálico"
-            }
-        },
-        "font_color_game": {
-            "type": "colorpicker",
-            "label": "Cor da fonte do nome do jogo",
-            "group": "Fontes",
-            "value": "#ffffff"
-        },
-        "shadow_color": {
-            "type": "colorpicker",
-            "label": "Cor da sombra do texto",
-            "group": "Fontes",
-            "value": "#888888"
-        },
         "border_radius": {
             "type": "dropdown",
-            "label": "Arredondar bordas",
-            "group": "Bordas",
+            "label": "Arredondamento",
+            "group": "Geral",
             "value": "0",
             "options": {
                 "0": "0%",
@@ -120,23 +76,100 @@ código aberto para você poder indicar seus amigos streamers.
                 "50": "50%"
             }
         },
-        "border_color_user": {
-            "type": "colorpicker",
-            "label": "Cor da borda da foto do streamer",
-            "group": "Bordas",
-            "value": "#ffffff"
+        "animation_time": {
+            "type": "dropdown",
+            "label": "Tempo da exibição",
+            "group": "Geral",
+            "value": "14",
+            "options": {
+                "10": "10 segundos",
+                "15": "15 segundos",
+                "20": "20 segundos"
+            }
         },
-        "border_color_game": {
+        "font": {
+            "type": "googleFont",
+            "label": "Fonte",
+            "group": "Geral",
+            "value": "Roboto"
+        },
+        "shadow_color": {
             "type": "colorpicker",
-            "label": "Cor da borda da capa do jogo",
-            "group": "Bordas",
-            "value": "#ffffff"
+            "label": "Sombra",
+            "group": "Geral",
+            "value": "#888888"
         },
         "border_color_line": {
             "type": "colorpicker",
-            "label": "Cor da linha lateral",
-            "group": "Bordas",
-            "value": "#ffffff"
+            "label": "Cor da linha",
+            "group": "Geral",
+            "value": "#f4f4f4"
+        },
+        "border_color_name": {
+            "type": "colorpicker",
+            "label": "Cor da borda",
+            "group": "Nome",
+            "value": "#f4f4f4"
+        },
+        "font_color_name": {
+            "type": "colorpicker",
+            "label": "Cor da fonte",
+            "group": "Nome",
+            "value": "#f4f4f4"
+        },
+        "font_weight_name": {
+            "type": "dropdown",
+            "label": "Estilo da fonte",
+            "group": "Nome",
+            "value": "400",
+            "options": {
+                "400": "Normal",
+                "700": "Negrito",
+                "900": "Black"
+            }
+        },
+        "font_style_name": {
+            "type": "dropdown",
+            "label": "Itálico",
+            "group": "Nome",
+            "value": "normal",
+            "options": {
+                "normal": "Não",
+                "italic": "Sim"
+            }
+        },
+        "border_color_game": {
+            "type": "colorpicker",
+            "label": "Cor da borda",
+            "group": "Jogo",
+            "value": "#f4f4f4"
+        },
+        "font_color_game": {
+            "type": "colorpicker",
+            "label": "Cor da fonte",
+            "group": "Jogo",
+            "value": "#f4f4f4"
+        },
+        "font_weight_game": {
+            "type": "dropdown",
+            "label": "Estilo da fonte",
+            "group": "Jogo",
+            "value": "400",
+            "options": {
+                "400": "Normal",
+                "700": "Negrito",
+                "900": "Black"
+            }
+        },
+        "font_style_game": {
+            "type": "dropdown",
+            "label": "Itálico",
+            "group": "Jogo",
+            "value": "normal",
+            "options": {
+                "normal": "Não",
+                "italic": "Sim"
+            }
         }
     }
 
