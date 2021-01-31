@@ -4,7 +4,7 @@
 
 $client_id = "client_id";
 
-// database
+// base
 
 $db_host = 'localhost';
 $db_base = 'base';

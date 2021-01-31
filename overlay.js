@@ -1,5 +1,7 @@
 /**
- * !indica <https://github.com/brandaorodrigo/indica>
+ *
+ * https://github.com/brandaorodrigo/indica
+ *
  */
 
 let custom, overlay = [], empty = 1

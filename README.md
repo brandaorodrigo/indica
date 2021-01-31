@@ -8,9 +8,9 @@ https://xt.art.br/indica
 
 ## desenvolvido por
 
-- rodrigo brandão
-- lucas linhares
-- sony linhares
+- rodrigo brandão / https://twitch.tv/brandaozzz
+- sony linhares  / https://twitch.tv/xtart
+- lucas linhares  / https://twitch.tv/tchepper
 
 # comando
 

@@ -4,10 +4,6 @@
 
 include "config.php";
 
-// twitch
-
-$url = "https://api.twitch.tv/kraken/";
-
 // header
 
 header("Access-Control-Allow-Origin: *");
@@ -28,13 +24,14 @@ $uri = trim($uri, "/");
 $uri = explode("/", $uri);
 $indication = @$uri[2];
 $caller = @$uri[3];
-
-// javascript
-
 if (!$indication) {
     http_response_code(400);
     exit();
 }
+
+// twitch
+
+$url = "https://api.twitch.tv/kraken/";
 
 // id
 
