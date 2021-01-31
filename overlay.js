@@ -1,9 +1,367 @@
-let custom,
-    overlay = [],
-    empty = 1
+/**
+ * !indica <https://github.com/brandaorodrigo/indica>
+ */
 
-function css_pre() /* custom */ {
-    document.body.insertAdjacentHTML("beforeend", `
+let custom, overlay = [], empty = 1
+
+const field = {
+    "command": {
+        "type": "text",
+        "label": "Qual é seu comando personalizado?",
+        "group": "Comando",
+        "value": "!indica"
+    },
+    "border_radius": {
+        "type": "dropdown",
+        "label": "Arredondamento",
+        "group": "Geral",
+        "value": "0",
+        "options": {
+            "0": "0%",
+            "5": "5%",
+            "10": "10%",
+            "30": "30%",
+            "50": "50%"
+        }
+    },
+    "animation_time": {
+        "type": "dropdown",
+        "label": "Tempo da exibição",
+        "group": "Geral",
+        "value": "14",
+        "options": {
+            "10": "10 segundos",
+            "15": "15 segundos",
+            "20": "20 segundos"
+        }
+    },
+    "font": {
+        "type": "googleFont",
+        "label": "Fonte",
+        "group": "Geral",
+        "value": "Roboto"
+    },
+    "shadow_color": {
+        "type": "colorpicker",
+        "label": "Sombra",
+        "group": "Geral",
+        "value": "#888888"
+    },
+    "border_color_line": {
+        "type": "colorpicker",
+        "label": "Cor da linha",
+        "group": "Geral",
+        "value": "#f4f4f4"
+    },
+    "border_color_name": {
+        "type": "colorpicker",
+        "label": "Cor da borda",
+        "group": "Nome",
+        "value": "#f4f4f4"
+    },
+    "font_color_name": {
+        "type": "colorpicker",
+        "label": "Cor da fonte",
+        "group": "Nome",
+        "value": "#f4f4f4"
+    },
+    "font_weight_name": {
+        "type": "dropdown",
+        "label": "Estilo da fonte",
+        "group": "Nome",
+        "value": "400",
+        "options": {
+            "400": "Normal",
+            "700": "Negrito",
+            "900": "Black"
+        }
+    },
+    "font_style_name": {
+        "type": "dropdown",
+        "label": "Itálico",
+        "group": "Nome",
+        "value": "normal",
+        "options": {
+            "normal": "Não",
+            "italic": "Sim"
+        }
+    },
+    "border_color_game": {
+        "type": "colorpicker",
+        "label": "Cor da borda",
+        "group": "Jogo",
+        "value": "#f4f4f4"
+    },
+    "font_color_game": {
+        "type": "colorpicker",
+        "label": "Cor da fonte",
+        "group": "Jogo",
+        "value": "#f4f4f4"
+    },
+    "font_weight_game": {
+        "type": "dropdown",
+        "label": "Estilo da fonte",
+        "group": "Jogo",
+        "value": "400",
+        "options": {
+            "400": "Normal",
+            "700": "Negrito",
+            "900": "Black"
+        }
+    },
+    "font_style_game": {
+        "type": "dropdown",
+        "label": "Itálico",
+        "group": "Jogo",
+        "value": "normal",
+        "options": {
+            "normal": "Não",
+            "italic": "Sim"
+        }
+    }
+}
+
+const render = () => /* custom */ {
+    let html = `
+    <style>
+
+        * {
+            transform-style: preserve-3d;
+        }
+
+        body {
+            font-family: '` + custom.font + `', sans-serif;
+            overflow: hidden;
+            background: transparent;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .container {
+            position: relative;
+            max-width: 335px;
+            min-height: 365px;
+            overflow: hidden;
+            display: none;
+            transition: 2s ease-in-out;
+        }
+
+        .container .images-group {
+            border-left: 4px solid ` + custom.border_color_line + `;
+            position: relative;
+            padding: 0px 0px 0px 10px;
+            max-height: 268px;
+        }
+
+        .container .images-group #image_logo_container {
+            border: 4px solid ` + custom.border_color_name + `;
+            border-radius: ` + custom.border_radius + `%;
+            width: 100%;
+            max-width: 260px;
+            height: 260px;
+            overflow: hidden;
+        }
+
+        .container .images-group #image_game_container {
+            height: ` + (custom.border_radius > 25 ? "105px" : "140px") + `;
+            border: 4px solid ` + custom.border_color_game + `;
+            border-radius: ` + custom.border_radius + `%;
+            object-fit: cover;
+            width: 100%;
+            max-width: 105px;
+            position: absolute;
+            bottom: 14px;
+            right: 0px;
+            overflow: hidden;
+        }
+
+        .container #image_logo,
+        .container #image_game {
+            width: 100%;
+            object-fit: cover;
+            vertical-align: middle;
+            background: #0e0e10;
+        }
+
+        .container #image_game {
+            margin-top: ` + (custom.border_radius > 25 ? "-10px" : "0") + `;
+        }
+
+        .container .texts {
+            text-transform: uppercase;
+            padding: 10px 0 0 0;
+            min-height: 85px;
+            height: auto;
+        }
+
+        .container .texts #name {
+            text-shadow: -2px 2px 4px ` + custom.shadow_color + `;
+            color: ` + custom.font_color_name + `;
+            font-weight: ` + custom.font_weight_name + `;
+            font-style: ` + custom.font_style_name + `;
+            opacity: 0;
+            width: 100%;
+            text-align: right;
+            font-size: 40px;
+        }
+
+        .container .texts #game {
+            text-shadow: -2px 2px 4px ` + custom.shadow_color + `;
+            color: ` + custom.font_color_game + `;
+            font-weight: ` + custom.font_weight_game + `;
+            font-style: ` + custom.font_style_game + `;
+            opacity: 0;
+            font-weight: 700;
+            width: 100%;
+            text-align: right;
+            font-size: 22px;
+        }
+
+        /* animation properties */
+
+        .container.active {
+            display: block;
+        }
+
+        .active .images-group {
+            overflow: hidden;
+            top: -268px;
+            animation: lineStart .5s linear 0s forwards, lineStart .5s linear ` + custom.animation_time + `.5s alternate-reverse backwards;
+            animation-fill-mode: forwards;
+        }
+
+        /* shine */
+
+        .active .shine_box {
+            position: relative;
+        }
+
+        .active .shine_box:before {
+            content: "";
+            z-index: 10;
+            position: absolute;
+            height: 200%;
+            width: 200%;
+            top: -120%;
+            left: -120%;
+            background: linear-gradient(transparent 0%, rgba(255, 255, 255, 0.1) 45%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.1) 55%, transparent 100%);
+            transition: all 2s;
+            transform: rotate(-45deg);
+        }
+
+        .active #image_logo_container:before {
+            animation: shine 5s infinite forwards;
+        }
+
+        .active #image_game_container:before {
+            animation: shine 5s infinite forwards 5.13s;
+        }
+
+        .active #image_logo_container {
+            margin-left: -500px;
+            opacity: 0;
+            animation: profilePhoto .5s linear .8s forwards, profilePhoto .5s linear ` + custom.animation_time + `s alternate-reverse backwards;
+            animation-fill-mode: forwards;
+        }
+
+        .active #image_game_container {
+            width: 0px;
+            max-height: 140px;
+            opacity: 0;
+            animation: gamePhoto .4s linear 1s forwards, gamePhoto .4s linear ` + custom.animation_time + `s alternate-reverse backwards;
+            animation-fill-mode: forwards;
+        }
+
+        .active .texts #name {
+            margin-left: -335px;
+            animation: streamerName .9s ease-in-out 1s forwards, streamerName .9s ease-in-out ` + custom.animation_time + `s alternate-reverse backwards;
+            animation-fill-mode: forwards;
+        }
+
+        .active .texts #game {
+            margin-left: 335px;
+            animation: gameName .9s ease-in-out 1s forwards, gameName .9s ease-in-out ` + custom.animation_time + `s alternate-reverse backwards;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes lineStart {
+            0% {
+                top: -268px;
+            }
+            100% {
+                top: 0px;
+            }
+        }
+
+        @keyframes profilePhoto {
+            0% {
+                margin-left: -500px;
+                opacity: 0;
+            }
+            100% {
+                margin-left: 0px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes gamePhoto {
+            0% {
+                width: 0%;
+                max-width: 0px;
+                height: 0;
+                opacity: 0;
+            }
+            100% {
+                width: 100%;
+                max-width: 105px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes streamerName {
+            0% {
+                margin-left: -335px;
+                opacity: 0;
+            }
+            100% {
+                margin-left: 0;
+                opacity: 1;
+            }
+        }
+
+        @keyframes gameName {
+            0% {
+                margin-left: 335px;
+                opacity: 0;
+            }
+            100% {
+                margin-left: 0;
+                opacity: 1;
+            }
+        }
+
+        /* shine */
+
+        @keyframes shine {
+            0% {
+                top: -120%;
+                left: -120%;
+            }
+            20% {
+                left: 100%;
+                top: 100%;
+            }
+            40% {
+                left: 100%;
+                top: 100%;
+            }
+            100% {
+                left: 100%;
+                top: 100%;
+            }
+        }
+
+    </style>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=` + custom.font.replace(" ", "+") + `"/>
     <div id="container" class="container">
         <div class="images-group">
@@ -18,50 +376,11 @@ function css_pre() /* custom */ {
             <div id="name"></div>
             <div id="game"></div>
         </div>
-    </div>`)
-    document.querySelector("body").style.fontFamily = custom.font
-    if (document.querySelector(".images-group")) {
-        document.querySelector(".images-group").style.borderColor = custom.border_color_line
-    }
-    if (document.querySelector("#image_logo_container")) {
-        document.querySelector("#image_logo_container").style.borderRadius = custom.border_radius + "%"
-        document.querySelector("#image_logo_container").style.borderColor = custom.border_color_user
-    }
-    if (document.querySelector("#image_game_container")) {
-        if (custom.border_radius > 25) {
-            document.querySelector("#image_game_container").style.height = "105px"
-            document.querySelector("#image_game_container").style.objectFit = "cover"
-        }
-        document.querySelector("#image_game_container").style.borderRadius = custom.border_radius + "%"
-        document.querySelector("#image_game_container").style.borderColor = custom.border_color_game
-    }
-    if (document.querySelector("#name")) {
-        document.querySelector("body").style.fontFamily = custom.font
-        document.querySelector("#name").style.color = custom.font_color_user
-        document.querySelector("#name").style.textShadow = "-2px 2px 4px " + custom.shadow_color
-        let check_font_user = custom.font_style_user.split("_")
-        if (typeof check_font_user[1] !== "undefined") {
-            document.querySelector("#name").style.fontWeight = custom.check_font_user[0]
-            document.querySelector("#name").style.fontStyle = custom.check_font_user[1]
-        } else {
-            document.querySelector("#name").style.fontWeight = custom.font_style_user
-        }
-    }
-    if (document.querySelector("#game")) {
-        document.querySelector("body").style.fontFamily = custom.font
-        document.querySelector("#game").style.color = custom.font_color_game
-        document.querySelector("#game").style.textShadow = "-2px 2px 4px " + custom.shadow_color
-        let check_font_game = custom.font_style_game.split("_")
-        if (typeof check_font_game[1] !== "undefined") {
-            document.querySelector("#game").style.fontWeight = custom.check_font_game[0]
-            document.querySelector("#game").style.fontStyle = custom.check_font_game[1]
-        } else {
-            document.querySelector("#game").style.fontWeight = custom.font_style_game
-        }
-    }
+    </div>`
+    document.body.insertAdjacentHTML("beforeend", html)
 }
 
-function css_pos() {
+const render_fix = () => {
     let name = document.querySelector("#name"),
         name_font_size
     if (name.textContent.length < 8) {
@@ -94,19 +413,19 @@ function css_pos() {
     game.style.fontSize = game_font_size
 }
 
-function flow() /* overlay, empty */ {
+const flow = () => /* overlay, empty */ {
     if (empty && overlay.length) {
         empty = 0
         let current = overlay.shift()
-        show(current)
+        flow_load(current)
         setTimeout(() => {
             empty = 1
             flow()
-        }, 17000)
+        }, ((custom.animation_time * 1000) + 2000))
     }
 }
 
-function show(current) {
+const flow_load = (current) => {
     Object.keys(current).forEach((key) => {
         if (document.querySelector("#" + key)) {
             if (key.substring(0, 5) == "image") {
@@ -116,17 +435,15 @@ function show(current) {
             }
         }
     })
-    css_pos()
+    render_fix()
     let container = document.querySelector("#container")
+    css_add(container, "active")
     setTimeout(() => {
-        add_css_class(container, "active")
-        setTimeout(() => {
-            remove_css_class(container, "active")
-        }, 15000)
-    }, 666)
+        css_remove(container, "active")
+    }, ((custom.animation_time * 1000) + 1000))
 }
 
-function add_css_class(element, classname) {
+const css_add = (element, classname) => {
     if (element.classList) {
         element.classList.add(classname)
     } else {
@@ -134,7 +451,7 @@ function add_css_class(element, classname) {
     }
 }
 
-function remove_css_class(element, classname) {
+const css_remove = (element, classname) => {
     if (element.classList) {
         element.classList.remove(classname)
     } else {
@@ -144,25 +461,17 @@ function remove_css_class(element, classname) {
     }
 }
 
-/* listeners */
+/* streamelements */
 
-window.addEventListener("onWidgetLoad", function(obj) {
+window.addEventListener("onWidgetLoad", (obj) => /* custom */ {
     custom = obj.detail.fieldData
-    custom.command = custom.command ? custom.command : SE_API.setField("command", "!indica")
-    custom.font = custom.font ? custom.font : SE_API.setField("font", "Roboto")
-    custom.font_style_user = custom.font_style_user ? custom.font_style_user : SE_API.setField("font_style_user", "700")
-    custom.font_color_user = custom.font_color_user ? custom.font_color_user : SE_API.setField("font_color_user", "#ffffff")
-    custom.font_style_game = custom.font_style_game ? custom.font_style_game : SE_API.setField("font_style_game", "400")
-    custom.font_color_game = custom.font_color_game ? custom.font_color_game : SE_API.setField("font_color_game", "#ffffff")
-    custom.shadow_color = custom.shadow_color ? custom.shadow_color : SE_API.setField("shadow_color", "#888888")
-    custom.border_radius = custom.border_radius ? custom.border_radius : SE_API.setField("border_radius", "0")
-    custom.border_color_user = custom.border_color_user ? custom.border_color_user : SE_API.setField("border_color_user", "#ffffff")
-    custom.border_color_game = custom.border_color_game ? custom.border_color_game : SE_API.setField("border_color_game", "#ffffff")
-    custom.border_color_line = custom.border_color_line ? custom.border_color_line : SE_API.setField("border_color_line", "#ffffff")
-    css_pre()
+    Object.keys(field).forEach((key) => {
+        custom[key] = custom[key] ? custom[key] : SE_API.setField(key, field[key].value)
+    })
+    render()
 })
 
-window.addEventListener("onEventReceived", function(obj) /* custom */ {
+window.addEventListener("onEventReceived", (obj) => /* custom, overlay */ {
     if (obj.detail.event && obj.detail.listener === "message") {
         let caller = obj.detail.event.data.channel
         let word = obj.detail.event.data.text.split(" ")
@@ -170,115 +479,12 @@ window.addEventListener("onEventReceived", function(obj) /* custom */ {
             let badges = obj.detail.event.data.tags.badges.replace(/\d+/g, "").replace(/,/g, "").split("/")
             if (badges.indexOf("moderator") != -1 || badges.indexOf("broadcaster") != -1) {
                 fetch("https://xt.art.br/indica/api/" + word[1] + "/" + caller + "?" + Date.now())
-                    .then(function(response) {
-                        if (response.status != 200) {
-                            throw new Error()
-                        }
-                        return response.json()
-                    })
-                    .then(function(response) {
-                        overlay.push(response)
-                        flow()
-                    })
+                .then(response => response.json())
+                .then((response) => {
+                    overlay.push(response)
+                    flow()
+                })
             }
         }
     }
 })
-
-/*
-
-custom fields
-
-{
-    "command": {
-        "type": "text",
-        "label": "Qual é seu comando personalizado?",
-        "group": "Comando",
-        "value": "!indica"
-    },
-    "font": {
-        "type": "googleFont",
-        "label": "Fonte",
-        "group": "Fontes",
-        "value": "Roboto"
-    },
-    "font_style_user": {
-        "type": "dropdown",
-        "label": "Estilo da fonte do nome do streamer",
-        "group": "Fontes",
-        "value": "700",
-        "options": {
-            "400": "Normal",
-            "700": "Negrito",
-            "900": "Black",
-            "400_italic": "Normal Itálico",
-            "700_italic": "Negrito Itálico",
-            "900_italic": "Black Itálico"
-        }
-    },
-    "font_color_user": {
-        "type": "colorpicker",
-        "label": "Cor da fonte do nome do streamer",
-        "group": "Fontes",
-        "value": "#ffffff"
-    },
-    "font_style_game": {
-        "type": "dropdown",
-        "label": "Estilo da fonte do nome do jogo",
-        "group": "Fontes",
-        "value": "400",
-        "options": {
-            "400": "Normal",
-            "700": "Negrito",
-            "900": "Black",
-            "400_italic": "Normal Itálico",
-            "700_italic": "Negrito Itálico",
-            "900_italic": "Black Itálico"
-        }
-    },
-    "font_color_game": {
-        "type": "colorpicker",
-        "label": "Cor da fonte do nome do jogo",
-        "group": "Fontes",
-        "value": "#ffffff"
-    },
-    "shadow_color": {
-        "type": "colorpicker",
-        "label": "Cor da sombra do texto",
-        "group": "Fontes",
-        "value": "#888888"
-    },
-    "border_radius": {
-        "type": "dropdown",
-        "label": "Arredondar bordas",
-        "group": "Bordas",
-        "value": "0",
-        "options": {
-            "0": "0%",
-            "5": "5%",
-            "10": "10%",
-            "30": "30%",
-            "50": "50%"
-        }
-    },
-    "border_color_user": {
-        "type": "colorpicker",
-        "label": "Cor da borda da foto do streamer",
-        "group": "Bordas",
-        "value": "#ffffff"
-    },
-    "border_color_game": {
-        "type": "colorpicker",
-        "label": "Cor da borda da capa do jogo",
-        "group": "Bordas",
-        "value": "#ffffff"
-    },
-    "border_color_line": {
-        "type": "colorpicker",
-        "label": "Cor da linha lateral",
-        "group": "Bordas",
-        "value": "#ffffff"
-    }
-}
-
-*/

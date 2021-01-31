@@ -1,7 +1,6 @@
 # !indica
 
-!indica é uma ferramenta totalmente customizável e de
-código aberto para você poder indicar seus amigos streamers.
+!indica é uma ferramenta totalmente customizável e de código aberto para streamers indicarem outros streamers em suas lives.
 
 ## site oficial
 
@@ -44,7 +43,7 @@ https://xt.art.br/indica
 
 ### html
 
-    <script src="https://xt.art.br/indica/overlay/"></script>
+    <script src="https://xt.art.br/indica/overlay.js"></script>
 
 ### css
 
