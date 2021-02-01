@@ -30,7 +30,7 @@ const field = {
         "type": "dropdown",
         "label": "Tempo da exibição",
         "group": "Geral",
-        "value": "14",
+        "value": "15",
         "options": {
             "10": "10 segundos",
             "15": "15 segundos",
