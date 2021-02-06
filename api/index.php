@@ -22,10 +22,20 @@ $uri = mb_strtolower($uri);
 $uri = preg_replace("/[^a-z0-9_\/]/i", "", $uri);
 $uri = trim($uri, "/");
 $uri = explode("/", $uri);
+
 $indication = @$uri[2];
 $caller = @$uri[3];
+$plain = @$uri[4];
+
 if (!$indication) {
     http_response_code(400);
+    exit();
+}
+
+// plain user
+
+if ($plain == "user") {
+    echo $indication;
     exit();
 }
 
@@ -62,9 +72,9 @@ if (!$result) {
     exit();
 }
 
-// json
+// array
 
-$json = [
+$array = [
     "id" => $result->_id,
     "name" => $result->display_name,
     "url" => "https://twitch.tv/" . $result->name,
@@ -76,7 +86,14 @@ $json = [
     "caller" => $caller
 ];
 
-// log
+// plain
+
+if ($plain) {
+    echo @$array[$plain];
+    exit();
+}
+
+// database
 
 /*
 CREATE TABLE IF NOT EXISTS `indica` (
@@ -89,7 +106,12 @@ CREATE TABLE IF NOT EXISTS `indica` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 */
 
+// pdo
+
 $pdo = new PDO('mysql:host=' . $db_host .';dbname=' . $db_base, $db_user, $db_pass);
+
+// insert
+
 $sql =
 "INSERT INTO `indica` (
     `channel`,
@@ -108,4 +130,4 @@ $statement->execute();
 // echo
 
 header("Content-type:application/json; charset=utf8");
-echo json_encode($json);
+echo json_encode($array);
