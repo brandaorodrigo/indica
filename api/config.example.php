@@ -10,3 +10,7 @@ $db_host = 'localhost';
 $db_base = 'base';
 $db_user = 'user';
 $db_pass = 'pass';
+
+// static
+
+$hours = 6;
