@@ -16,7 +16,7 @@ https://xt.art.br/indica
 
 ### streamelements
 
-    /me Conheça ${user ${1}} que estava jogando ${game ${1}}. Acesse http://twitch.tv/${user.name ${1}}
+    /me Conheça ${urlfetch https://xt.art.br/indica/api/${1}/bot/name} que estava jogando ${urlfetch https://xt.art.br/indica/api/${1}/bot/game}. Acesse https://twitch.tv/${urlfetch https://xt.art.br/indica/api/${1}/bot/user}
 
 ### streamlabs | cloudbot
 
