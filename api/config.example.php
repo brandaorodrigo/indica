@@ -13,4 +13,4 @@ $db_pass = 'pass';
 
 // static
 
-$hours = 6;
+$hours = 1;
