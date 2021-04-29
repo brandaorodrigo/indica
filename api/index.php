@@ -78,15 +78,11 @@ function base64($img, $type = false) {
     return 'data:image/' . $type . ';charset=utf-8;base64, ' . $base64;
 }
 
-
-
 // ----------------------------------------------------------------------------
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, HEAD, OPTIONS, POST, PUT');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
-
-// ----------------------------------------------------------------------------
 
 $uri = $_SERVER['REQUEST_URI'];
 if (strstr($uri, '?')) {
@@ -106,8 +102,6 @@ if (!$indication) {
     exit();
 }
 
-// ----------------------------------------------------------------------------
-
 include 'config.php';
 
 $pdo = new PDO('mysql:host=' . $db_host .';dbname=' . $db_base, $db_user, $db_pass);
@@ -123,11 +117,11 @@ if ($caller == 'add' || $caller == 'rmv') {
             exit();
         }
         $date = date('Y-m-d H:i:s');
-        $sql ='DELETE FROM `images` WHERE `id` = {$user_id}';
+        $sql = "DELETE FROM `images` WHERE `id` = {$user_id}";
         query($pdo, $sql);
         if ($caller == 'add') {
             $sql =
-            'INSERT INTO `images` (
+            "INSERT INTO `images` (
                 `id`,
                 `image_custom`,
                 `date`
@@ -135,7 +129,7 @@ if ($caller == 'add' || $caller == 'rmv') {
                 {$user_id},
                 '{$_GET['img_logo']}',
                 '{$date}'
-            )';
+            )";
             query($pdo, $sql);
         }
     }
@@ -145,7 +139,7 @@ if ($caller == 'add' || $caller == 'rmv') {
 
 // ----------------------------------------------------------------------------
 
-$sql = 'SELECT * FROM `channels` WHERE `user` = '{$indication}'';
+$sql = "SELECT * FROM `channels` WHERE `user` = '{$indication}'";
 $twitch = select($pdo, $sql, true);
 if (!@$twitch->date || time() > strtotime(@$twitch->date) + ($hours * 3600)) {
     $user_id = twitch_users($client_id, $indication);
@@ -158,10 +152,10 @@ if (!@$twitch->date || time() > strtotime(@$twitch->date) + ($hours * 3600)) {
         http_response_code(400);
         exit();
     }
-    $sql = 'DELETE FROM `channels` WHERE `user` = '{$indication}'';
+    $sql = "DELETE FROM `channels` WHERE `user` = '{$indication}'";
     query($pdo, $sql);
     $sql =
-    'INSERT INTO `channels` (
+    "INSERT INTO `channels` (
         `id`,
         `user`,
         `name`,
@@ -183,11 +177,10 @@ if (!@$twitch->date || time() > strtotime(@$twitch->date) + ($hours * 3600)) {
         '{$twitch->image_logo}',
         '{$twitch->image_game}',
         '{$twitch->date}'
-    )';
+    )";
     query($pdo, $sql);
 }
-
-$sql = 'SELECT `image_custom` FROM `images` WHERE `id` = {$twitch->id}';
+$sql = "SELECT `image_custom` FROM `images` WHERE `id` = {$twitch->id}";
 $images = select($pdo, $sql, true);
 $image_custom = @$images->image_custom ?: null;
 if (!@getimagesize($image_custom)) {
@@ -221,9 +214,8 @@ $log = [
     'hour' => date('H:i:s')
 ];
 $log = (object)$log;
-
 $sql =
-'INSERT INTO `logs` (
+"INSERT INTO `logs` (
     `channel`,
     `game`,
     `caller`,
@@ -239,13 +231,12 @@ $sql =
     '{$log->datetime}',
     '{$log->date}',
     '{$log->hour}'
-)';
+)";
 query($pdo, $sql);
 
 // ----------------------------------------------------------------------------
 
 $twitch->image_logo = base64($twitch->image_logo);
 $twitch->image_game = base64($twitch->image_game);
-
 header('Content-type:application/json; charset=utf8');
 echo json_encode($twitch);
