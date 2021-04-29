@@ -34,8 +34,8 @@ function twitch_channels($client_id, $user_id) {
         "game" => $result->game ?: "(nenhum jogo, ainda)",
         "views" => $result->views,
         "followers" => $result->followers,
-        "image_logo" => $result->logo,
-        "image_game" => "https://static-cdn.jtvnw.net/ttv-boxart/" . rawurlencode($result->game) . "-144x192.jpg",
+        "image_logo" => !strstr($result->logo, 'default') ? $result->logo : "https://xt.art.br/indica/api/no_profile.png",
+        "image_game" => $result->game ? "https://static-cdn.jtvnw.net/ttv-boxart/" . rawurlencode($result->game) . "-144x192.jpg" : "https://xt.art.br/indica/api/no_game.png",
         "date" => date('Y-m-d H:i:s')
     ];
     $return = (object)$return;
