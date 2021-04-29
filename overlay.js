@@ -159,6 +159,7 @@ const render = () => /* custom */ {
             border: 4px solid ` + custom.border_color_name + `;
             border-radius: ` + custom.border_radius + `%;
             width: 100%;
+            height: 100%;
             max-width: 260px;
             height: 260px;
             overflow: hidden;
@@ -180,6 +181,7 @@ const render = () => /* custom */ {
         .container #image_logo,
         .container #image_game {
             width: 100%;
+            height: 100%;
             object-fit: cover;
             vertical-align: middle;
             background: #0e0e10;

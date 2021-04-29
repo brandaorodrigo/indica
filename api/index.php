@@ -1,37 +1,8 @@
 <?php
-// mysql ----------------------------------------------------------------------
-
-/*
-
-CREATE TABLE IF NOT EXISTS `channels` (
-    `id` int(11) NOT NULL,
-    `user` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-    `name` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-    `url` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-    `game` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-    `views` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-    `followers` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-    `image_logo` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-    `image_game` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-    `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-ALTER TABLE `channels` ADD PRIMARY KEY (`id`), ADD KEY `id` (`id`);
-
-CREATE TABLE IF NOT EXISTS `logs` (
-  `id` int(11) NOT NULL,
-  `channel` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
-  `game` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `caller` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ip` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `datetime` datetime NOT NULL,
-  `date` date DEFAULT NULL,
-  `time` time DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7920 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-*/
 
 // config ---------------------------------------------------------------------
+
+date_default_timezone_set('America/Fortaleza');
 
 include "config.php";
 
@@ -43,7 +14,7 @@ header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, Origin, Acce
 
 // uri ------------------------------------------------------------------------
 
-$uri = substr($_SERVER["REQUEST_URI"], $uri);
+$uri = $_SERVER["REQUEST_URI"];
 if (strstr($uri, "?")) {
     $pos = strpos($uri, "?");
     $uri = substr($uri, 0, $pos);
@@ -86,14 +57,12 @@ function select($sql, $first = false)
 
 // channels -------------------------------------------------------------------
 
-$past = date("Y-m-d H:i:s", (time() - ($hours * 3600)));
-
-$sql = "SELECT * FROM `channels` WHERE `date` >= '{$past}' AND `user` = '{$indication}'";
+$sql = "SELECT * FROM `channels` WHERE `user` = '{$indication}'";
 $twitch = select($sql, true);
 
-// kraken ---------------------------------------------------------------------
+if (!@$twitch->date || time() > strtotime(@$twitch->date) + ($hours * 3600)) {
 
-if (!$twitch) {
+    // kraken -----------------------------------------------------------------
 
     $url = "https://api.twitch.tv/kraken/";
 
@@ -167,6 +136,16 @@ if (!$twitch) {
     $statement = $pdo->prepare($sql);
     $statement->execute();
 
+}
+
+$sql = "SELECT `image_custom` FROM `images` WHERE `id` = {$twitch->id}";
+$image_custom = select($sql, true);
+$image_custom = @$image_custom->image_custom ?: null;
+if (!@getimagesize($image_custom)) {
+    $image_custom = null;
+}
+if ($image_custom) {
+    $twitch->image_logo = $image_custom;
 }
 
 // plain ----------------------------------------------------------------------
