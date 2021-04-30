@@ -7,6 +7,24 @@
 let custom, overlay = [], empty = 1
 
 const field = {
+    "img_logo": {
+        "type": "image-input",
+        "group": "Foto",
+        "label": "Escolher Foto"
+    },
+
+    "img_logo_add": {
+        "type": "button",
+        "label": "Enviar foto",
+        "group": "Foto",
+        "value": "1"
+    },
+    "img_logo_rmv": {
+        "type": "button",
+        "label": "Remover foto",
+        "group": "Foto",
+        "value": "1"
+    },
     "command": {
         "type": "text",
         "label": "Qual é seu comando personalizado?",
@@ -140,6 +158,8 @@ const render = () => /* custom */ {
         }
 
         .container {
+            left: 6px;
+            top: 6px;
             position: relative;
             max-width: 335px;
             min-height: 365px;
@@ -159,7 +179,6 @@ const render = () => /* custom */ {
             border: 4px solid ` + custom.border_color_name + `;
             border-radius: ` + custom.border_radius + `%;
             width: 100%;
-            height: 100%;
             max-width: 260px;
             height: 260px;
             overflow: hidden;
@@ -384,6 +403,8 @@ const render = () => /* custom */ {
     document.body.insertAdjacentHTML("beforeend", html)
 }
 
+/* utils */
+
 const render_fix = () => {
     let name = document.querySelector("#name"),
         name_font_size
@@ -417,36 +438,6 @@ const render_fix = () => {
     game.style.fontSize = game_font_size
 }
 
-const flow = () => /* overlay, empty */ {
-    if (empty && overlay.length) {
-        empty = 0
-        let current = overlay.shift()
-        flow_load(current)
-        setTimeout(() => {
-            empty = 1
-            flow()
-        }, ((custom.animation_time * 1000) + 2000))
-    }
-}
-
-const flow_load = (current) => {
-    Object.keys(current).forEach((key) => {
-        if (document.querySelector("#" + key)) {
-            if (key.substring(0, 5) == "image") {
-                document.querySelector("#" + key).setAttribute("src", current[key])
-            } else {
-                document.querySelector("#" + key).innerHTML = current[key]
-            }
-        }
-    })
-    render_fix()
-    let container = document.querySelector("#container")
-    css_add(container, "active")
-    setTimeout(() => {
-        css_remove(container, "active")
-    }, ((custom.animation_time * 1000) + 1000))
-}
-
 const css_add = (element, classname) => {
     if (element.classList) {
         element.classList.add(classname)
@@ -465,10 +456,55 @@ const css_remove = (element, classname) => {
     }
 }
 
+/* indica */
+
+const indica_call = (indication) => /* custom */ {
+    fetch("https://xt.art.br/indica/api/" + indication + "/" + custom.channel + "?" + Date.now())
+        .then(response => response.json())
+        .then((response) => {
+            overlay.push(response)
+            indica_row()
+        })
+}
+
+const indica_row = () => /* overlay, empty */ {
+    if (empty && overlay.length) {
+        empty = 0
+        let current = overlay.shift()
+        indica_flow(current)
+        setTimeout(() => {
+            empty = 1
+            indica_row()
+        }, ((custom.animation_time * 1000) + 2000))
+    }
+}
+
+const indica_flow = (current) => {
+    Object.keys(current).forEach((key) => {
+        if (document.querySelector("#" + key)) {
+            if (key.substring(0, 5) == "image") {
+                document.querySelector("#" + key).setAttribute("src", current[key])
+            } else {
+                document.querySelector("#" + key).innerHTML = current[key]
+            }
+        }
+    })
+    render_fix()
+    document.querySelector('#image_logo').onload = () => {
+        console.log("Image 1 ready to append");
+        let container = document.querySelector("#container")
+        css_add(container, "active")
+        setTimeout(() => {
+            css_remove(container, "active")
+        }, ((custom.animation_time * 1000) + 1000))
+    };
+}
+
 /* streamelements */
 
 window.addEventListener("onWidgetLoad", (obj) => /* custom */ {
     custom = obj.detail.fieldData
+    custom.channel = obj.detail.channel.username
     Object.keys(field).forEach((key) => {
         custom[key] = custom[key] ? custom[key] : SE_API.setField(key, field[key].value)
     })
@@ -476,18 +512,23 @@ window.addEventListener("onWidgetLoad", (obj) => /* custom */ {
 })
 
 window.addEventListener("onEventReceived", (obj) => /* custom, overlay */ {
+
+    if (obj.detail.event.field == "img_logo_add") {
+        fetch("https://xt.art.br/indica/api/" + custom.channel + "/add?img_logo=" + custom.img_logo)
+            .then(response => indica_call(custom.channel))
+    }
+
+    if (obj.detail.event.field == "img_logo_rmv") {
+        fetch("https://xt.art.br/indica/api/" + custom.channel + "/rmv?img_logo=https://cdn.streamelements.com")
+            .then(response => indica_call(custom.channel))
+    }
+
     if (obj.detail.event && obj.detail.listener === "message") {
-        let caller = obj.detail.event.data.channel
         let word = obj.detail.event.data.text.split(" ")
         if (word[0].toLowerCase() == custom.command.toLowerCase() && typeof word[1] !== "undefined") {
             let badges = obj.detail.event.data.tags.badges.replace(/\d+/g, "").replace(/,/g, "").split("/")
             if (badges.indexOf("moderator") != -1 || badges.indexOf("broadcaster") != -1) {
-                fetch("https://xt.art.br/indica/api/" + word[1] + "/" + caller + "?" + Date.now())
-                .then(response => response.json())
-                .then((response) => {
-                    overlay.push(response)
-                    flow()
-                })
+                indica_call(word[1])
             }
         }
     }

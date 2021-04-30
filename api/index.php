@@ -62,22 +62,6 @@ function query($pdo, $sql) {
     $statement->execute();
 }
 
-function base64($img, $type = false) {
-    if (!$type) {
-        $type = pathinfo($img, PATHINFO_EXTENSION);
-    }
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $img);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    $img = curl_exec($ch);
-    curl_close($ch);
-    if (!$img) {
-        return null;
-    }
-    $base64 = base64_encode($img);
-    return 'data:image/' . $type . ';charset=utf-8;base64, ' . $base64;
-}
-
 // ----------------------------------------------------------------------------
 
 header('Access-Control-Allow-Origin: *');
@@ -237,9 +221,6 @@ $sql =
 query($pdo, $sql);
 
 // ----------------------------------------------------------------------------
-
-//$twitch->image_logo = base64($twitch->image_logo);
-//$twitch->image_game = base64($twitch->image_game);
 
 header('Content-type:application/json; charset=utf8');
 echo json_encode($twitch);
