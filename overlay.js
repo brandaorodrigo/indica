@@ -491,7 +491,6 @@ const indica_flow = (current) => {
     })
     render_fix()
     document.querySelector('#image_logo').onload = () => {
-        console.log("Image 1 ready to append");
         let container = document.querySelector("#container")
         css_add(container, "active")
         setTimeout(() => {
