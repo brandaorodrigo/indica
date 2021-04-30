@@ -34,8 +34,8 @@ function twitch_channels($client_id, $user_id) {
         'game' => $result->game ?: '(nenhum jogo, ainda)',
         'views' => $result->views,
         'followers' => $result->followers,
-        'image_logo' => !strstr($result->logo, 'default') ? $result->logo : 'https://xt.art.br/indica/api/no_profile.png',
-        'image_game' => $result->game ? 'https://static-cdn.jtvnw.net/ttv-boxart/' . rawurlencode($result->game) . '-144x192.jpg' : 'https://xt.art.br/indica/api/no_game.png',
+        'image_logo' => !strstr($result->logo, 'default') ? $result->logo : 'https://xt.art.br/indica/api/no_profile.jpg',
+        'image_game' => $result->game ? 'https://static-cdn.jtvnw.net/ttv-boxart/' . rawurlencode($result->game) . '-144x192.jpg' : 'https://xt.art.br/indica/api/no_game.jpg',
         'date' => date('Y-m-d H:i:s')
     ];
     $return = (object)$return;
@@ -141,6 +141,7 @@ if ($caller == 'add' || $caller == 'rmv') {
 
 $sql = "SELECT * FROM `channels` WHERE `user` = '{$indication}'";
 $twitch = select($pdo, $sql, true);
+
 if (!@$twitch->date || time() > strtotime(@$twitch->date) + ($hours * 3600)) {
     $user_id = twitch_users($client_id, $indication);
     if (!$user_id) {
@@ -180,6 +181,7 @@ if (!@$twitch->date || time() > strtotime(@$twitch->date) + ($hours * 3600)) {
     )";
     query($pdo, $sql);
 }
+
 $sql = "SELECT `image_custom` FROM `images` WHERE `id` = {$twitch->id}";
 $images = select($pdo, $sql, true);
 $image_custom = @$images->image_custom ?: null;
@@ -236,7 +238,8 @@ query($pdo, $sql);
 
 // ----------------------------------------------------------------------------
 
-$twitch->image_logo = base64($twitch->image_logo);
-$twitch->image_game = base64($twitch->image_game);
+//$twitch->image_logo = base64($twitch->image_logo);
+//$twitch->image_game = base64($twitch->image_game);
+
 header('Content-type:application/json; charset=utf8');
 echo json_encode($twitch);
