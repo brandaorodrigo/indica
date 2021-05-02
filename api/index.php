@@ -75,69 +75,74 @@ if (strstr($uri, '?')) {
 }
 $uri = urldecode($uri);
 $uri = mb_strtolower($uri);
-$uri = preg_replace('/[^a-z0-9_\/]/i', '', $uri);
+$uri = preg_replace('/[^a-z0-9_\-\.\/]/i', '', $uri);
 $uri = trim($uri, '/');
 $uri = explode('/', $uri);
-$indication = @$uri[2];
-$caller = @$uri[3];
-$plain = @$uri[4];
-if (!$indication) {
+if (!@$uri[2]) {
     http_response_code(400);
     exit();
 }
+// ----------------------------------------------------------------------------
+
+$user_id = $channel_name = $action = $plain = null;
+if (is_numeric($uri[2])) {
+    $user_id = $uri[2];
+} else {
+    $channel_name = $uri[2];
+}
+$action = @$uri[3];
+$plain = @$uri[4];
+
+// ----------------------------------------------------------------------------
 
 include 'config.php';
-
 $pdo = new PDO('mysql:host=' . $db_host .';dbname=' . $db_base, $db_user, $db_pass);
 
 // ----------------------------------------------------------------------------
 
-if ($caller == 'add' || $caller == 'rmv') {
-    // TODO TENTAR LIMITAR O CALLER PARA O STREAMELEMENTS SOMENTE
-    if (@$_GET['img_logo'] && stristr(@$_GET['img_logo'], 'https://cdn.streamelements.com')) {
-        $user_id = twitch_users($client_id, $indication);
-        if (!$user_id) {
-            http_response_code(400);
-            exit();
-        }
-        $date = date('Y-m-d H:i:s');
-        $sql = "DELETE FROM `images` WHERE `id` = {$user_id}";
-        query($pdo, $sql);
-        if ($caller == 'add') {
-            $sql =
-            "INSERT INTO `images` (
-                `id`,
-                `image_custom`,
-                `date`
-            ) VALUES (
-                {$user_id},
-                '{$_GET['img_logo']}',
-                '{$date}'
-            )";
-            query($pdo, $sql);
-        }
+if ($action == 'gif') {
+    if (!$user_id || !$plain) {
+        http_response_code(400);
+        exit();
     }
+    $sql = "DELETE FROM `images` WHERE `id` = {$user_id}";
+    query($pdo, $sql);
+    $image_custom = 'https://cdn.streamelements.com/uploads/' . $plain;
+    if (!@getimagesize($image_custom)) {
+        http_response_code(404);
+        exit();
+    }
+    $sql =
+    "INSERT INTO `images` (
+        `id`,
+        `image_custom`,
+        `date`
+    ) VALUES (
+        {$user_id},
+        '{$image_custom}',
+        NOW()
+    )";
+    query($pdo, $sql);
     http_response_code(200);
     exit();
 }
 
 // ----------------------------------------------------------------------------
 
-$sql = "SELECT * FROM `channels` WHERE `user` = '{$indication}'";
+$sql = "SELECT * FROM `channels` WHERE " . ($user_id ? "`id` = " . $user_id : "`user` = '" . $channel_name . "'");
 $twitch = select($pdo, $sql, true);
-
 if (!@$twitch->date || time() > strtotime(@$twitch->date) + ($hours * 3600)) {
-    $user_id = twitch_users($client_id, $indication);
+    $user_id = $user_id ?: twitch_users($client_id, $channel_name);
     if (!$user_id) {
-        http_response_code(400);
+        http_response_code(404);
         exit();
     }
     $twitch = twitch_channels($client_id, $user_id);
     if (!$twitch) {
-        http_response_code(400);
+        http_response_code(404);
         exit();
     }
-    $sql = "DELETE FROM `channels` WHERE `user` = '{$indication}'";
+    $sql = "DELETE FROM `channels` WHERE `id` = {$user_id}";
     query($pdo, $sql);
     $sql =
     "INSERT INTO `channels` (
@@ -165,7 +170,6 @@ if (!@$twitch->date || time() > strtotime(@$twitch->date) + ($hours * 3600)) {
     )";
     query($pdo, $sql);
 }
-
 $sql = "SELECT `image_custom` FROM `images` WHERE `id` = {$twitch->id}";
 $images = select($pdo, $sql, true);
 $image_custom = @$images->image_custom ?: null;
@@ -178,7 +182,7 @@ if ($image_custom) {
 
 // ----------------------------------------------------------------------------
 
-if ($caller == 'bot') {
+if ($action == 'bot') {
     if (!$plain) {
         http_response_code(400);
         exit();
@@ -193,7 +197,7 @@ if ($caller == 'bot') {
 $log = [
     'channel' => $twitch->user,
     'game' => $twitch->game,
-    'caller' => $caller,
+    'caller' => $action,
     'ip' => $_SERVER['REMOTE_ADDR'],
     'datetime' => date('Y-m-d H:i:s'),
     'date' => date('Y-m-d'),
