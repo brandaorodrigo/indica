@@ -195,10 +195,6 @@ const render = () => /* custom */ {
             background: #0e0e10;
         }
 
-        .container #image_game {
-            margin-top: ` + (custom.border_radius > 25 ? "-10px" : "0") + `;
-        }
-
         .container .texts {
             text-transform: uppercase;
             padding: 10px 0 0 0;
