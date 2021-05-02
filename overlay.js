@@ -444,7 +444,7 @@ const css_remove = (element, classname) => {
 /* indica */
 
 const indica_call = (indication) => /* custom */ {
-    fetch("https://xt.art.br/indica/api/" + indication + "/" + custom.channel + "?" + Date.now())
+    fetch("https://xt.art.br/indica/api/" + indication + "/" + custom.channel)
         .then(response => response.json())
         .then((response) => {
             overlay.push(response)
@@ -488,6 +488,7 @@ const indica_flow = (current) => {
 
 window.addEventListener("onWidgetLoad", (obj) => /* custom */ {
     custom = obj.detail.fieldData
+    custom.id = obj.detail.channel.providerId
     custom.channel = obj.detail.channel.username
     Object.keys(field).forEach((key) => {
         custom[key] = custom[key] ? custom[key] : field[key].value
@@ -495,15 +496,20 @@ window.addEventListener("onWidgetLoad", (obj) => /* custom */ {
     render()
 })
 
-window.addEventListener("onEventReceived", (obj) => /* custom, overlay */ {
+window.addEventListener("onEventReceived", (obj) => /* custom */ {
+
+    if (obj.detail.event.field == "test") {
+        indica_call(custom.channel)
+    }
 
     if (obj.detail.event.field == "img_logo_add") {
-        fetch("https://xt.art.br/indica/api/" + custom.channel + "/add?img_logo=" + custom.img_logo)
+        custom.img_logo = custom.img_logo.replace('https://cdn.streamelements.com/uploads/', '')
+        fetch("https://xt.art.br/indica/api/" + custom.id + "/gif/" + custom.img_logo)
             .then(response => indica_call(custom.channel))
     }
 
     if (obj.detail.event.field == "img_logo_rmv") {
-        fetch("https://xt.art.br/indica/api/" + custom.channel + "/rmv?img_logo=https://cdn.streamelements.com")
+        fetch("https://xt.art.br/indica/api/" + custom.id + "/gif/unlink")
             .then(response => indica_call(custom.channel))
     }
 
