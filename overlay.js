@@ -44,17 +44,6 @@ const field = {
             "50": "50%"
         }
     },
-    "animation_time": {
-        "type": "dropdown",
-        "label": "Tempo da exibição",
-        "group": "Geral",
-        "value": "15",
-        "options": {
-            "10": "10 segundos",
-            "15": "15 segundos",
-            "20": "20 segundos"
-        }
-    },
     "font": {
         "type": "googleFont",
         "label": "Fonte",
@@ -249,7 +238,7 @@ const render = () => /* custom */ {
         .active .images-group {
             overflow: hidden;
             top: -268px;
-            animation: lineStart .5s linear 0s forwards, lineStart .5s linear ` + custom.animation_time + `.5s alternate-reverse backwards;
+            animation: lineStart .5s linear 0s forwards, lineStart .5s linear 15.5s alternate-reverse backwards;
             animation-fill-mode: forwards;
         }
 
@@ -283,7 +272,7 @@ const render = () => /* custom */ {
         .active #image_logo_container {
             margin-left: -500px;
             opacity: 0;
-            animation: profilePhoto .5s linear .8s forwards, profilePhoto .5s linear ` + custom.animation_time + `s alternate-reverse backwards;
+            animation: profilePhoto .5s linear .8s forwards, profilePhoto .5s linear 15s alternate-reverse backwards;
             animation-fill-mode: forwards;
         }
 
@@ -291,19 +280,19 @@ const render = () => /* custom */ {
             width: 0px;
             max-height: 140px;
             opacity: 0;
-            animation: gamePhoto .4s linear 1s forwards, gamePhoto .4s linear ` + custom.animation_time + `s alternate-reverse backwards;
+            animation: gamePhoto .4s linear 1s forwards, gamePhoto .4s linear 15s alternate-reverse backwards;
             animation-fill-mode: forwards;
         }
 
         .active .texts #name {
             margin-left: -335px;
-            animation: streamerName .9s ease-in-out 1s forwards, streamerName .9s ease-in-out ` + custom.animation_time + `s alternate-reverse backwards;
+            animation: streamerName .9s ease-in-out 1s forwards, streamerName .9s ease-in-out 15s alternate-reverse backwards;
             animation-fill-mode: forwards;
         }
 
         .active .texts #game {
             margin-left: 335px;
-            animation: gameName .9s ease-in-out 1s forwards, gameName .9s ease-in-out ` + custom.animation_time + `s alternate-reverse backwards;
+            animation: gameName .9s ease-in-out 1s forwards, gameName .9s ease-in-out 15s alternate-reverse backwards;
             animation-fill-mode: forwards;
         }
 
@@ -475,7 +464,7 @@ const indica_row = () => /* overlay, empty */ {
         setTimeout(() => {
             empty = 1
             indica_row()
-        }, ((custom.animation_time * 1000) + 2000))
+        }, ((15 * 1000) + 2000))
     }
 }
 
@@ -495,8 +484,8 @@ const indica_flow = (current) => {
         css_add(container, "active")
         setTimeout(() => {
             css_remove(container, "active")
-        }, ((custom.animation_time * 1000) + 1000))
-    };
+        }, ((15 * 1000) + 1000))
+    }
 }
 
 /* streamelements */
@@ -505,7 +494,7 @@ window.addEventListener("onWidgetLoad", (obj) => /* custom */ {
     custom = obj.detail.fieldData
     custom.channel = obj.detail.channel.username
     Object.keys(field).forEach((key) => {
-        custom[key] = custom[key] ? custom[key] : SE_API.setField(key, field[key].value)
+        custom[key] = custom[key] ? custom[key] : field[key].value
     })
     render()
 })
