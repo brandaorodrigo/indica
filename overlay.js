@@ -6,130 +6,6 @@
 
 let custom, overlay = [], empty = 1
 
-const field = {
-    'img_logo': {
-        'type': 'image-input',
-        'group': 'Foto',
-        'label': 'Escolher Foto'
-    },
-
-    'img_logo_add': {
-        'type': 'button',
-        'label': 'Enviar foto',
-        'group': 'Foto',
-        'value': '1'
-    },
-    'img_logo_rmv': {
-        'type': 'button',
-        'label': 'Remover foto',
-        'group': 'Foto',
-        'value': '1'
-    },
-    'command': {
-        'type': 'text',
-        'label': 'Qual é seu comando personalizado?',
-        'group': 'Comando',
-        'value': '!indica'
-    },
-    'border_radius': {
-        'type': 'dropdown',
-        'label': 'Arredondamento',
-        'group': 'Geral',
-        'value': '0',
-        'options': {
-            '0': '0%',
-            '5': '5%',
-            '10': '10%',
-            '30': '30%',
-            '50': '50%'
-        }
-    },
-    'font': {
-        'type': 'googleFont',
-        'label': 'Fonte',
-        'group': 'Geral',
-        'value': 'Valera'
-    },
-    'shadow_color': {
-        'type': 'colorpicker',
-        'label': 'Sombra',
-        'group': 'Geral',
-        'value': 'rgba(0,0,0,0.4)'
-    },
-    'border_color_line': {
-        'type': 'colorpicker',
-        'label': 'Cor da linha',
-        'group': 'Geral',
-        'value': '#f2f2f2'
-    },
-    'border_color_name': {
-        'type': 'colorpicker',
-        'label': 'Cor da borda',
-        'group': 'Nome',
-        'value': '#f2f2f2'
-    },
-    'font_color_name': {
-        'type': 'colorpicker',
-        'label': 'Cor da fonte',
-        'group': 'Nome',
-        'value': '#f2f2f2'
-    },
-    'font_weight_name': {
-        'type': 'dropdown',
-        'label': 'Estilo da fonte',
-        'group': 'Nome',
-        'value': '400',
-        'options': {
-            '400': 'Normal',
-            '700': 'Negrito',
-            '900': 'Black'
-        }
-    },
-    'font_style_name': {
-        'type': 'dropdown',
-        'label': 'Itálico',
-        'group': 'Nome',
-        'value': 'normal',
-        'options': {
-            'normal': 'Não',
-            'italic': 'Sim'
-        }
-    },
-    'border_color_game': {
-        'type': 'colorpicker',
-        'label': 'Cor da borda',
-        'group': 'Jogo',
-        'value': '#f2f2f2'
-    },
-    'font_color_game': {
-        'type': 'colorpicker',
-        'label': 'Cor da fonte',
-        'group': 'Jogo',
-        'value': '#f2f2f2'
-    },
-    'font_weight_game': {
-        'type': 'dropdown',
-        'label': 'Estilo da fonte',
-        'group': 'Jogo',
-        'value': '400',
-        'options': {
-            '400': 'Normal',
-            '700': 'Negrito',
-            '900': 'Black'
-        }
-    },
-    'font_style_game': {
-        'type': 'dropdown',
-        'label': 'Itálico',
-        'group': 'Jogo',
-        'value': 'normal',
-        'options': {
-            'normal': 'Não',
-            'italic': 'Sim'
-        }
-    }
-}
-
 const render = () => /* custom */ {
     let html = `
     <style>
@@ -388,8 +264,6 @@ const render = () => /* custom */ {
     document.body.insertAdjacentHTML('beforeend', html)
 }
 
-/* helpers */
-
 const render_fix = () => {
     let name = document.querySelector('#name'),
         name_font_size
@@ -441,8 +315,6 @@ const css_remove = (element, classname) => {
     }
 }
 
-/* indica */
-
 const indica_call = (indication) => /* custom */ {
     fetch('https://xt.art.br/indica/api/' + indication + '/' + custom.channel)
         .then(response => response.json())
@@ -488,14 +360,11 @@ window.addEventListener('onWidgetLoad', (obj) => /* custom */ {
     custom = obj.detail.fieldData
     custom.id = obj.detail.channel.providerId
     custom.channel = obj.detail.channel.username
-    Object.keys(field).forEach((key) => {
-        custom[key] = custom[key] ? custom[key] : field[key].value
-    })
     render()
 })
 
 window.addEventListener('onEventReceived', (obj) => /* custom */ {
-    if (obj.detail.event.field == 'test') {
+    if (obj.detail.event.field == 'test_1' || obj.detail.event.field == 'test_2') {
         indica_call(custom.channel)
     }
     if (obj.detail.event.field == 'img_logo_add') {
