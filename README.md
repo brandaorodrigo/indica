@@ -71,16 +71,39 @@ Conheça $target que estava jogando $game[$target]. Acesse https://twitch.tv/$ta
 
 ```javascript
 {
+    "img_channel": {
+        "type": "image-input",
+        "group": "GIF PARA SEU PERFIL",
+        "label": "Faça upload de seu gif personalizado"
+    },
+    "img_channel_link": {
+        "type": "button",
+        "label": "ENVIAR SEU GIF PARA O INDICA",
+        "group": "GIF PARA SEU PERFIL",
+        "value": "1"
+    },
+    "img_channel_unlink": {
+        "type": "button",
+        "label": "REMOVER O SEU GIF DO INDICA",
+        "group": "GIF PARA SEU PERFIL",
+        "value": "1"
+    },
     "command": {
         "type": "text",
-        "label": "Qual é seu comando personalizado?",
-        "group": "Comando",
+        "label": "QUAL O SEU COMANDO?",
+        "group": "PERSONALIZE SEU COMANDO",
         "value": "!indica"
+    },
+    "btn_test_color": {
+        "type": "button",
+        "label": "TESTAR A SUA OVERLAY",
+        "group": "FORMAS E CORES",
+        "value": "1"
     },
     "border_radius": {
         "type": "dropdown",
-        "label": "Arredondamento",
-        "group": "Geral",
+        "label": "ARREDONDAMENTO DOS CANTOS",
+        "group": "FORMAS E CORES",
         "value": "0",
         "options": {
             "0": "0%",
@@ -90,99 +113,80 @@ Conheça $target que estava jogando $game[$target]. Acesse https://twitch.tv/$ta
             "50": "50%"
         }
     },
-    "animation_time": {
-        "type": "dropdown",
-        "label": "Tempo da exibição",
-        "group": "Geral",
-        "value": "14",
-        "options": {
-            "10": "10 segundos",
-            "15": "15 segundos",
-            "20": "20 segundos"
-        }
-    },
-    "font": {
-        "type": "googleFont",
-        "label": "Fonte",
-        "group": "Geral",
-        "value": "Roboto"
-    },
-    "shadow_color": {
-        "type": "colorpicker",
-        "label": "Sombra",
-        "group": "Geral",
-        "value": "#888888"
-    },
     "border_color_line": {
         "type": "colorpicker",
-        "label": "Cor da linha",
-        "group": "Geral",
-        "value": "#f4f4f4"
+        "label": "COR DA LINHA DE ABERTURA",
+        "group": "FORMAS E CORES",
+        "value": "#f2f2f2"
     },
-    "border_color_name": {
+    "border_color_channel": {
         "type": "colorpicker",
-        "label": "Cor da borda",
-        "group": "Nome",
-        "value": "#f4f4f4"
-    },
-    "font_color_name": {
-        "type": "colorpicker",
-        "label": "Cor da fonte",
-        "group": "Nome",
-        "value": "#f4f4f4"
-    },
-    "font_weight_name": {
-        "type": "dropdown",
-        "label": "Estilo da fonte",
-        "group": "Nome",
-        "value": "400",
-        "options": {
-            "400": "Normal",
-            "700": "Negrito",
-            "900": "Black"
-        }
-    },
-    "font_style_name": {
-        "type": "dropdown",
-        "label": "Itálico",
-        "group": "Nome",
-        "value": "normal",
-        "options": {
-            "normal": "Não",
-            "italic": "Sim"
-        }
+        "label": "COR DA BORDA | FOTO DO CANAL",
+        "group": "FORMAS E CORES",
+        "value": "#f2f2f2"
     },
     "border_color_game": {
         "type": "colorpicker",
-        "label": "Cor da borda",
-        "group": "Jogo",
-        "value": "#f4f4f4"
+        "label": "COR DA BORDA | FOTO DO JOGO",
+        "group": "FORMAS E CORES",
+        "value": "#f2f2f2"
+    },
+    "font_color_channel": {
+        "type": "colorpicker",
+        "label": "COR DA FONTE | NOME DO CANAL",
+        "group": "FORMAS E CORES",
+        "value": "#f2f2f2"
     },
     "font_color_game": {
         "type": "colorpicker",
-        "label": "Cor da fonte",
-        "group": "Jogo",
-        "value": "#f4f4f4"
+        "label": "COR DA FONTE | NOME DO JOGO",
+        "group": "FORMAS E CORES",
+        "value": "#f2f2f2"
     },
-    "font_weight_game": {
+    "shadow_color": {
+        "type": "colorpicker",
+        "label": "COR DA SOMBRA",
+        "group": "FORMAS E CORES",
+        "value": "rgba(0,0,0,0.4)"
+    },
+    "btn_test_font": {
+        "type": "button",
+        "label": "TESTAR A SUA OVERLAY",
+        "group": "ESTILOS DE TEXTO",
+        "value": "1"
+    },
+    "font": {
+        "type": "googleFont",
+        "label": "FONTE DOS TEXTOS",
+        "group": "ESTILOS DE TEXTO",
+        "value": "Varela Round"
+    },
+    "font_weight_channel": {
         "type": "dropdown",
-        "label": "Estilo da fonte",
-        "group": "Jogo",
+        "label": "ESTILO DA FONTE | NOME DO CANAL",
+        "group": "ESTILOS DE TEXTO",
         "value": "400",
         "options": {
             "400": "Normal",
+            "400|italic": "Itálico",
             "700": "Negrito",
-            "900": "Black"
+            "700|italic": "Negrito e Itálico",
+            "900": "Black",
+            "900|italic": "Black e Itálico"
         }
     },
-    "font_style_game": {
+    "font_weight_game": {
         "type": "dropdown",
-        "label": "Itálico",
-        "group": "Jogo",
-        "value": "normal",
+        "label": "ESTILO DA FONTE | NOME DO JOGO",
+        "group": "ESTILOS DE TEXTO",
+        "value": "400",
         "options": {
-            "normal": "Não",
-            "italic": "Sim"
+            "400": "Normal",
+            "400|italic": "Itálico",
+            "700": "Negrito",
+            "700|italic": "Negrito e Itálico",
+            "900": "Black",
+            "900|italic": "Black e Itálico"
         }
     }
 }

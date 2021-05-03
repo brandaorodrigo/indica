@@ -221,7 +221,7 @@ const render = () => /* custom */ {
             border-color: ` + custom.border_color_line + `;
         }
         .container .images-group #image_logo_container {
-            border-color: ` + custom.border_color_name + `;
+            border-color: ` + custom.border_color_channel + `;
             border-radius: ` + custom.border_radius + `%;
         }
         .container .images-group #image_game_container {
@@ -236,9 +236,9 @@ const render = () => /* custom */ {
             text-shadow: -2px 2px 4px ` + custom.shadow_color + `;
         }
         .container .texts #name {
-            color: ` + custom.font_color_name + `;
-            font-weight: ` + custom.font_weight_name + `;
-            font-style: ` + custom.font_style_name + `;
+            color: ` + custom.font_color_channel + `;
+            font-weight: ` + custom.font_weight_channel + `;
+            font-style: ` + custom.font_style_channel + `;
         }
         .container .texts #game {
             color: ` + custom.font_color_game + `;
@@ -283,7 +283,7 @@ const render_fix = () => {
         name_font_size = '8px'
     }
     name.style.fontSize = name_font_size
-    let game = document.getElementById('game'),
+    let game = document.querySelector('#game'),
         game_font_size
     if (game.textContent.length < 21) {
         game_font_size = '22px'
@@ -315,8 +315,8 @@ const css_remove = (element, classname) => {
     }
 }
 
-const indica_call = (indication) => /* custom */ {
-    fetch('https://xt.art.br/indica/api/' + indication + '/' + custom.channel)
+const indica_call = (channel, caller) => /* overlay */ {
+    fetch('https://xt.art.br/indica/api/' + channel + '/' + caller)
         .then(response => response.json())
         .then((response) => {
             overlay.push(response)
@@ -359,29 +359,52 @@ const indica_row = () => /* overlay, empty */ {
 window.addEventListener('onWidgetLoad', (obj) => /* custom */ {
     custom = obj.detail.fieldData
     custom.id = obj.detail.channel.providerId
-    custom.channel = obj.detail.channel.username
+    custom.caller = obj.detail.channel.username
+    // legacy - remove this in future version
+    if (custom.border_color_name && !custom.border_color_channel) {
+        custom.border_color_channel = custom.border_color_name
+    }
+    if (custom.font_color_name && !custom.font_color_channel) {
+        custom.font_color_channel = custom.font_color_name
+    }
+    if (custom.font_weight_name && !custom.font_weight_channel) {
+        custom.font_weight_channel = custom.font_weight_name
+    }
+    // legacy - remove this in future version
+    custom.font_style_channel = 'normal'
+    custom.font_style_game = 'normal'
+    if (custom.font_weight_channel.indexOf('|')) {
+        let font_weight_channel = custom.font_weight_channel.split('|')
+        custom.font_weight_channel = font_weight_channel[0]
+        custom.font_style_channel = font_weight_channel[1]
+    }
+    if (custom.font_weight_channel.indexOf('|')) {
+        let font_weight_game = custom.font_weight_game.split('|')
+        custom.font_weight_game = font_weight_game[0]
+        custom.font_style_game = font_weight_game[1]
+    }
     render()
 })
 
 window.addEventListener('onEventReceived', (obj) => /* custom */ {
-    if (obj.detail.event.field == 'test_1' || obj.detail.event.field == 'test_2') {
-        indica_call(custom.channel)
+    if (obj.detail.event.field == 'btn_test_color' || obj.detail.event.field == 'btn_test_font') {
+        indica_call(custom.caller, custom.caller)
     }
-    if (obj.detail.event.field == 'img_logo_add') {
-        custom.img_logo = custom.img_logo.replace('https://cdn.streamelements.com/uploads/', '')
-        fetch('https://xt.art.br/indica/api/' + custom.id + '/gif/' + custom.img_logo)
-            .then(response => indica_call(custom.channel))
+    if (obj.detail.event.field == 'img_channel_link') {
+        custom.img_channel = custom.img_channel.replace('https://cdn.streamelements.com/uploads/', '')
+        fetch('https://xt.art.br/indica/api/' + custom.id + '/gif/' + custom.img_channel)
+            .then(response => indica_call(custom.caller, custom.caller))
     }
-    if (obj.detail.event.field == 'img_logo_rmv') {
+    if (obj.detail.event.field == 'img_channel_unlink') {
         fetch('https://xt.art.br/indica/api/' + custom.id + '/gif/unlink')
-            .then(response => indica_call(custom.channel))
+            .then(response => indica_call(custom.caller, custom.caller))
     }
     if (obj.detail.event && obj.detail.listener === 'message') {
         let word = obj.detail.event.data.text.split(' ')
         if (word[0].toLowerCase() == custom.command.toLowerCase() && typeof word[1] !== 'undefined') {
             let badges = obj.detail.event.data.tags.badges.replace(/\d+/g, '').replace(/,/g, '').split('/')
             if (badges.indexOf('moderator') != -1 || badges.indexOf('broadcaster') != -1) {
-                indica_call(word[1])
+                indica_call(word[1], custom.caller)
             }
         }
     }
