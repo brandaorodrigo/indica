@@ -1,23 +1,27 @@
 # !indica
 
-!indica é uma ferramenta totalmente customizável e de código aberto para streamers indicarem outros streamers em suas lives.
-
-## site oficial
-
 https://xt.art.br/indica
 
-## desenvolvido por
+**!indica** is a fully customizable tool for streamers who recommend other streamers in their livestreams.
+
+## developed by
 
 - rodrigo brandão / https://twitch.tv/brandaozzz
-- sony linhares  / https://twitch.tv/xtart
-- lucas linhares  / https://twitch.tv/tchepper
+- sony linhares / https://twitch.tv/xtart
+- lucas linhares / https://twitch.tv/tchepper
 
-# comando
+# commands
 
 ### streamelements
 
 ```
 Conheça ${urlfetch https://xt.art.br/indica/api/${1}/bot/name} que estava jogando ${urlfetch https://xt.art.br/indica/api/${1}/bot/game}. Acesse https://twitch.tv/${urlfetch https://xt.art.br/indica/api/${1}/bot/user}
+```
+
+### streamelements | default
+
+```
+Conheça ${channel ${touser}} que estava jogando ${game ${touser}}. Acesse https://twitch.tv/${channel ${touser}}
 ```
 
 ### streamlabs | cloudbot
@@ -48,7 +52,7 @@ Conheça $arg1username que estava jogando $arg1userstreamgame. Acesse https://tw
 Conheça $target que estava jogando $game[$target]. Acesse https://twitch.tv/$target
 ```
 
-# overlay para streamelements > custom widget
+# streamelements overlay > custom widget
 
 ### html
 
@@ -57,20 +61,25 @@ Conheça $target que estava jogando $game[$target]. Acesse https://twitch.tv/$ta
 ```
 ### css
 
-```html
-(apagar tudo e deixar vazio)
+```css
+/* empty */
 ```
 
 ### js
 
-```html
-(apagar tudo e deixar vazio)
+```javascript
+/* empty */
 ```
 
 ### fields
 
-```javascript
-{
+```json
+    "command": {
+        "type": "text",
+        "label": "QUAL O SEU COMANDO?",
+        "group": "PERSONALIZE SEU COMANDO",
+        "value": "!indica"
+    },
     "img_channel": {
         "type": "image-input",
         "group": "GIF PARA SEU PERFIL",
@@ -87,12 +96,6 @@ Conheça $target que estava jogando $game[$target]. Acesse https://twitch.tv/$ta
         "label": "REMOVER O SEU GIF DO INDICA",
         "group": "GIF PARA SEU PERFIL",
         "value": "1"
-    },
-    "command": {
-        "type": "text",
-        "label": "QUAL O SEU COMANDO?",
-        "group": "PERSONALIZE SEU COMANDO",
-        "value": "!indica"
     },
     "btn_test_color": {
         "type": "button",
@@ -193,12 +196,11 @@ Conheça $target que estava jogando $game[$target]. Acesse https://twitch.tv/$ta
 ```
 ### data
 
-```html
-(não precisa alterar)
+```json
+/* empty */
 ```
 
-# informações para desenvolvedores
-## mysql
+# mysql
 
 ```sql
 CREATE TABLE IF NOT EXISTS `channels` (
