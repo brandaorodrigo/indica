@@ -2,7 +2,8 @@
 
 // twitch
 
-$client_id = "client_id";
+$client_id = 'client_id';
+$client_secret = 'client_secret';
 
 // base
 
@@ -13,4 +14,8 @@ $db_pass = 'pass';
 
 // static
 
-$hours = 1;
+$hours = 2;
+
+// password
+
+$password = 'password';

@@ -1,74 +1,10 @@
 <?php
 
-function twitch_users($client_id, $channel_name) {
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => 'https://api.twitch.tv/kraken/users/?login=' . $channel_name . '&client_id=' . $client_id . '&api_version=5',
-        CURLOPT_RETURNTRANSFER => 1
-    ]);
-    $result = @curl_exec($curl);
-    $result = @json_decode($result, true);
-    $user_id = @$result['users'][0]['_id'];
-    if (!$user_id) {
-        return false;
-    }
-    return $user_id;
-}
-
-function twitch_channels($client_id, $user_id) {
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => 'https://api.twitch.tv/kraken/channels/' . $user_id . '?client_id=' . $client_id . '&api_version=5',
-        CURLOPT_RETURNTRANSFER => 1
-    ]);
-    $result = @curl_exec($curl);
-    $result = @json_decode($result);
-    if (!$result) {
-        return false;
-    }
-    $return = [
-        'id' => $result->_id,
-        'user' => $result->name,
-        'name' => $result->display_name,
-        'url' => 'https://twitch.tv/' . $result->name,
-        'game' => $result->game ?: '(nenhum jogo, ainda)',
-        'views' => $result->views,
-        'followers' => $result->followers,
-        'image_logo' => !strstr($result->logo, 'default') ? $result->logo : 'https://xt.art.br/indica/api/no_profile.jpg',
-        'image_game' => $result->game ? 'https://static-cdn.jtvnw.net/ttv-boxart/' . rawurlencode($result->game) . '-144x192.jpg' : 'https://xt.art.br/indica/api/no_game.jpg',
-        'date' => date('Y-m-d H:i:s')
-    ];
-    $return = (object)$return;
-    return $return;
-}
-
-function select($pdo, $sql, $first = false) {
-    $return = [];
-    $statement = $pdo->prepare($sql);
-    $statement->execute();
-    if ($statement->columnCount() > 0) {
-        while ($row = @$statement->fetch(PDO::FETCH_OBJ)) {
-            if ($first) {
-                return $row;
-            }
-            $return[] = $row;
-        }
-    }
-    return $return;
-}
-
-function query($pdo, $sql) {
-    $statement = $pdo->prepare($sql);
-    $statement->execute();
-}
-
-// ----------------------------------------------------------------------------
-
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, HEAD, OPTIONS, POST, PUT');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
 
-// ----------------------------------------------------------------------------
+// ====================================================================================================================
 
 $uri = $_SERVER['REQUEST_URI'];
 if (strstr($uri, '?')) {
@@ -84,30 +20,36 @@ if (!@$uri[2]) {
     http_response_code(400);
     exit();
 }
-// ----------------------------------------------------------------------------
 
-$user_id = $channel_name = $action = $plain = null;
-if (is_numeric($uri[2])) {
-    $user_id = $uri[2];
-} else {
-    $channel_name = $uri[2];
-}
-$action = @$uri[3];
-$plain = @$uri[4];
+$channel = $uri[2];
+$action = @$uri[3] ?: null;
+$plain = @$uri[4] ?: null;
 
-// ----------------------------------------------------------------------------
+// ====================================================================================================================
 
+include 'utils.php';
 include 'config.php';
+
+// ====================================================================================================================
+
 $pdo = new PDO('mysql:host=' . $db_host .';dbname=' . $db_base, $db_user, $db_pass);
 
-// ----------------------------------------------------------------------------
+// ====================================================================================================================
+
+$user = get_twitch_user($pdo, $client_id, $client_secret, $channel, $hours);
+if (!$user) {
+    http_response_code(404);
+    exit();
+}
+
+// ====================================================================================================================
 
 if ($action == 'gif') {
-    if (!$user_id || !$plain) {
+    if (!$plain) {
         http_response_code(400);
         exit();
     }
-    $sql = "DELETE FROM `images` WHERE `id` = {$user_id}";
+    $sql = "DELETE FROM `images` WHERE `id` = {$user->id}";
     query($pdo, $sql);
     $image_custom = 'https://cdn.streamelements.com/uploads/' . $plain;
     if (!@getimagesize($image_custom)) {
@@ -120,7 +62,7 @@ if ($action == 'gif') {
         `image_custom`,
         `date`
     ) VALUES (
-        {$user_id},
+        {$user->id},
         '{$image_custom}',
         NOW()
     )";
@@ -129,60 +71,31 @@ if ($action == 'gif') {
     exit();
 }
 
-// ----------------------------------------------------------------------------
+// ====================================================================================================================
 
-$sql = "SELECT * FROM `channels` WHERE " . ($user_id ? "`id` = " . $user_id : "`user` = '" . $channel_name . "'");
-$twitch = select($pdo, $sql, true);
-if (!@$twitch->date || time() > strtotime(@$twitch->date) + ($hours * 3600)) {
-    $user_id = $user_id ?: twitch_users($client_id, $channel_name);
-    if (!$user_id) {
-        http_response_code(404);
-        exit();
-    }
-    $twitch = twitch_channels($client_id, $user_id);
-    if (!$twitch) {
-        http_response_code(404);
-        exit();
-    }
-    $sql = "DELETE FROM `channels` WHERE `id` = {$user_id}";
-    query($pdo, $sql);
-    $sql =
-    "INSERT INTO `channels` (
-        `id`,
-        `user`,
-        `name`,
-        `url`,
-        `game`,
-        `views`,
-        `followers`,
-        `image_logo`,
-        `image_game`,
-        `date`
-    ) VALUES (
-        {$twitch->id},
-        '{$twitch->user}',
-        '{$twitch->name}',
-        '{$twitch->url}',
-        '{$twitch->game}',
-        {$twitch->views},
-        {$twitch->followers},
-        '{$twitch->image_logo}',
-        '{$twitch->image_game}',
-        '{$twitch->date}'
-    )";
-    query($pdo, $sql);
-}
-$sql = "SELECT `image_custom` FROM `images` WHERE `id` = {$twitch->id}";
+$user = (object)[
+    'id' => $user->id,
+    'user' => $user->user,
+    'name' => $user->name,
+    'url' => 'https://twitch.tv/' . $user->user,
+    'game' => $user->game ?: '(nenhum jogo, ainda)',
+    'image_logo' => !strstr($user->image_logo, 'default') ? $user->image_logo : 'https://xt.art.br/indica/api/no_profile.jpg',
+    'image_game' => $user->game ? 'https://static-cdn.jtvnw.net/ttv-boxart/' . rawurlencode($user->game) . '-144x192.jpg' : 'https://xt.art.br/indica/api/no_game.jpg',
+];
+
+// ====================================================================================================================
+
+$sql = "SELECT `image_custom` FROM `images` WHERE `id` = {$user->id}";
 $images = select($pdo, $sql, true);
 $image_custom = @$images->image_custom ?: null;
 if (!@getimagesize($image_custom)) {
     $image_custom = null;
 }
 if ($image_custom) {
-    $twitch->image_logo = $image_custom;
+    $user->image_logo = $image_custom;
 }
 
-// ----------------------------------------------------------------------------
+// ====================================================================================================================
 
 if ($action == 'bot') {
     if (!$plain) {
@@ -190,15 +103,16 @@ if ($action == 'bot') {
         exit();
     }
     header('Content-type:text/plain; charset=utf8');
-    echo $twitch->{$plain};
+    echo $user->{$plain};
     exit();
 }
 
-// ----------------------------------------------------------------------------
+// ====================================================================================================================
 
 $log = [
-    'channel' => $twitch->user,
-    'game' => $twitch->game,
+    'id' => $user->id,
+    'channel' => $user->user,
+    'game' => $user->game,
     'caller' => $action,
     'ip' => $_SERVER['REMOTE_ADDR'],
     'datetime' => date('Y-m-d H:i:s'),
@@ -226,7 +140,7 @@ $sql =
 )";
 query($pdo, $sql);
 
-// ----------------------------------------------------------------------------
+// ====================================================================================================================
 
 header('Content-type:application/json; charset=utf8');
-echo json_encode($twitch);
+echo json_encode($user);
