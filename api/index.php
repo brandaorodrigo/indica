@@ -32,7 +32,7 @@ include 'config.php';
 
 // ====================================================================================================================
 
-$pdo = new PDO('mysql:host=' . $db_host .';dbname=' . $db_base, $db_user, $db_pass);
+$pdo = new PDO('mysql:host=' . $db_host . ';dbname=' . $db_base, $db_user, $db_pass);
 
 // ====================================================================================================================
 
@@ -57,15 +57,15 @@ if ($action == 'gif') {
         exit();
     }
     $sql =
-    "INSERT INTO `images` (
-        `id`,
-        `image_custom`,
-        `date`
-    ) VALUES (
-        {$user->id},
-        '{$image_custom}',
-        NOW()
-    )";
+        "INSERT INTO `images` (
+            `id`,
+            `image_custom`,
+            `date`
+        ) VALUES (
+            {$user->id},
+            '{$image_custom}',
+            NOW()
+        )";
     query($pdo, $sql);
     http_response_code(200);
     exit();
@@ -79,8 +79,8 @@ $user = (object)[
     'name' => $user->name,
     'url' => 'https://twitch.tv/' . $user->user,
     'game' => $user->game ?: '(nenhum jogo, ainda)',
-    'image_logo' => !strstr($user->image_logo, 'default') ? $user->image_logo : 'https://xt.art.br/indica/api/no_profile.jpg',
-    'image_game' => $user->game ? 'https://static-cdn.jtvnw.net/ttv-boxart/' . rawurlencode($user->game_id) . '_IGDB-144x192.jpg' : 'https://xt.art.br/indica/api/no_game.jpg',
+    'image_logo' => !strstr($user->image_logo, 'default') ? $user->image_logo : 'https://xt.art.br/indica/api/no_profile.png',
+    'image_game' => $user->game ? 'https://static-cdn.jtvnw.net/ttv-boxart/' . rawurlencode($user->game_id) . '_IGDB-144x192.jpg' : 'https://xt.art.br/indica/api/no_game.png',
 ];
 
 // ====================================================================================================================
@@ -121,23 +121,23 @@ $log = [
 ];
 $log = (object)$log;
 $sql =
-"INSERT INTO `logs` (
-    `channel`,
-    `game`,
-    `caller`,
-    `ip`,
-    `datetime`,
-    `date`,
-    `time`
-) VALUES (
-    '{$log->channel}',
-    '{$log->game}',
-    '{$log->caller}',
-    '{$log->ip}',
-    '{$log->datetime}',
-    '{$log->date}',
-    '{$log->hour}'
-)";
+    "INSERT INTO `logs` (
+        `channel`,
+        `game`,
+        `caller`,
+        `ip`,
+        `datetime`,
+        `date`,
+        `time`
+    ) VALUES (
+        '{$log->channel}',
+        '{$log->game}',
+        '{$log->caller}',
+        '{$log->ip}',
+        '{$log->datetime}',
+        '{$log->date}',
+        '{$log->hour}'
+    )";
 query($pdo, $sql);
 
 // ====================================================================================================================
