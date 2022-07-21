@@ -17,7 +17,7 @@ $uri = preg_replace('/[^a-z0-9_\-\.\/]/i', '', $uri);
 $uri = trim($uri, '/');
 $uri = explode('/', $uri);
 if (!@$uri[2]) {
-    http_response_code(400);
+    http_response_code(401);
     exit();
 }
 
@@ -80,7 +80,7 @@ $user = (object)[
     'url' => 'https://twitch.tv/' . $user->user,
     'game' => $user->game ?: '(nenhum jogo, ainda)',
     'image_logo' => !strstr($user->image_logo, 'default') ? $user->image_logo : 'https://xt.art.br/indica/api/no_profile.jpg',
-    'image_game' => $user->game ? 'https://static-cdn.jtvnw.net/ttv-boxart/' . rawurlencode($user->game) . '-144x192.jpg' : 'https://xt.art.br/indica/api/no_game.jpg',
+    'image_game' => $user->game ? 'https://static-cdn.jtvnw.net/ttv-boxart/' . rawurlencode($user->game_id) . '_IGDB-144x192.jpg' : 'https://xt.art.br/indica/api/no_game.jpg',
 ];
 
 // ====================================================================================================================

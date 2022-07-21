@@ -1,11 +1,13 @@
 <?php
 
-function query($pdo, $sql) {
+function query($pdo, $sql)
+{
     $statement = $pdo->prepare($sql);
     $statement->execute();
 }
 
-function select($pdo, $sql, $first = false) {
+function select($pdo, $sql, $first = false)
+{
     $return = [];
     $statement = $pdo->prepare($sql);
     $statement->execute();
@@ -20,7 +22,8 @@ function select($pdo, $sql, $first = false) {
     return $return;
 }
 
-function set_token($pdo, $client_id, $client_secret) {
+function set_token($pdo, $client_id, $client_secret)
+{
     $curl = curl_init();
     curl_setopt_array($curl, [
         CURLOPT_URL => 'https://id.twitch.tv/oauth2/token',
@@ -38,11 +41,11 @@ function set_token($pdo, $client_id, $client_secret) {
         curl_close($curl);
         return null;
     }
-    $response->expires_in = date('Y-m-d H:i:s', time() + $response->expires_in);
+    $response->expires_in = date('Y-m-d H:i:s', time() + 86400);
     $sql = "DELETE FROM token";
     query($pdo, $sql);
     $sql =
-    "INSERT INTO token (
+        "INSERT INTO token (
         access_token,
         expires_in
     ) VALUES (
@@ -53,7 +56,8 @@ function set_token($pdo, $client_id, $client_secret) {
     return @$response->access_token ?? null;
 }
 
-function get_token($pdo, $client_id, $client_secret) {
+function get_token($pdo, $client_id, $client_secret)
+{
     $sql = "SELECT access_token FROM token WHERE expires_in > now()";
     $row = select($pdo, $sql, true);
     $access_token = @$row->access_token;
@@ -63,7 +67,8 @@ function get_token($pdo, $client_id, $client_secret) {
     return $access_token;
 }
 
-function set_twitch_user($pdo, $client_id, $client_secret, $channel) {
+function set_twitch_user($pdo, $client_id, $client_secret, $channel)
+{
     $access_token = get_token($pdo, $client_id, $client_secret);
     $curl = curl_init();
     curl_setopt_array($curl, [
@@ -99,57 +104,61 @@ function set_twitch_user($pdo, $client_id, $client_secret, $channel) {
         return null;
     }
     $user->game_name = $broadcaster->game_name;
-    curl_close($curl);
+    $user->game_id = $broadcaster->game_id;
     $sql = "DELETE FROM `users` WHERE `id` = {$user->id}";
     query($pdo, $sql);
     $date = date('Y-m-d H:i:s');
     $sql =
-    "INSERT INTO `users` (
-        `id`,
-        `user`,
-        `name`,
-        `image_logo`,
-        `game`,
-        `date`
-    ) VALUES (
-        {$user->id},
-        '{$user->login}',
-        '{$user->display_name}',
-        '{$user->profile_image_url}',
-        '{$user->game_name}',
-        '{$date}'
-    )";
+        "INSERT INTO `users` (
+            `id`,
+            `user`,
+            `name`,
+            `image_logo`,
+            `game`,
+            `game_id`,
+            `date`
+        ) VALUES (
+            {$user->id},
+            '{$user->login}',
+            '{$user->display_name}',
+            '{$user->profile_image_url}',
+            '{$user->game_name}',
+            '{$user->game_id}',
+            '{$date}'
+        )";
     query($pdo, $sql);
     return (object)[
         'id' => $user->id,
         'user' => $user->login,
         'name' => $user->display_name,
         'image_logo' => $user->profile_image_url,
-        'game' => $user->game_name
+        'game' => $user->game_name,
+        'game_id' => $user->game_id,
     ];
 }
 
-function get_twitch_user($pdo, $client_id, $client_secret, $channel, $hours) {
+function get_twitch_user($pdo, $client_id, $client_secret, $channel, $hours)
+{
     $expires_id = date('Y-m-d H:i:s', time() - ($hours * 3600));
     $sql =
-    "SELECT
-        users.id,
-        users.user,
-        users.name,
-        users.image_logo,
-        users.game,
-        users.date
-    FROM
-        users
-    WHERE
-        users.user = '{$channel}'
-    AND
-        users.date > '{$expires_id}'
-    ";
+        "SELECT
+            users.id,
+            users.user,
+            users.name,
+            users.image_logo,
+            users.game,
+            users.game_id,
+            users.date
+        FROM
+            users
+        WHERE
+            users.user = '{$channel}'
+        AND
+            users.date > '{$expires_id}'
+        ";
     $user = select($pdo, $sql, true);
     if (!$user) {
         $user = set_twitch_user($pdo, $client_id, $client_secret, $channel);
     }
     return $user;
 }
-
