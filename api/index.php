@@ -4,7 +4,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, HEAD, OPTIONS, POST, PUT');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
 
-// ====================================================================================================================
+// -----------------------------------------------------------------------------
 
 $uri = $_SERVER['REQUEST_URI'];
 if (strstr($uri, '?')) {
@@ -25,16 +25,17 @@ $channel = $uri[2];
 $action = @$uri[3] ?: null;
 $plain = @$uri[4] ?: null;
 
-// ====================================================================================================================
+// -----------------------------------------------------------------------------
 
 include 'utils.php';
 include 'config.php';
 
-// ====================================================================================================================
+// -----------------------------------------------------------------------------
 
-$pdo = new PDO('mysql:host=' . $db_host . ';dbname=' . $db_base, $db_user, $db_pass);
+$db_dsn = 'mysql:host=' . $db_host . ';dbname=' . $db_base;
+$pdo = new PDO($db_dsn, $db_user, $db_pass);
 
-// ====================================================================================================================
+// -----------------------------------------------------------------------------
 
 $user = get_twitch_user($pdo, $client_id, $client_secret, $channel, $hours);
 if (!$user) {
@@ -42,7 +43,7 @@ if (!$user) {
     exit();
 }
 
-// ====================================================================================================================
+// -----------------------------------------------------------------------------
 
 if ($action == 'gif') {
     if (!$plain) {
@@ -71,19 +72,23 @@ if ($action == 'gif') {
     exit();
 }
 
-// ====================================================================================================================
+// -----------------------------------------------------------------------------
 
 $user = (object)[
     'id' => $user->id,
     'user' => $user->user,
     'name' => $user->name,
     'url' => 'https://twitch.tv/' . $user->user,
-    'game' => $user->game ?: '(nenhum jogo, ainda)',
     'image_logo' => !strstr($user->image_logo, 'default') ? $user->image_logo : 'https://xt.art.br/indica/api/no_profile.png',
-    'image_game' => $user->game ? 'https://static-cdn.jtvnw.net/ttv-boxart/' . rawurlencode($user->game_id) . '_IGDB-144x192.jpg' : 'https://xt.art.br/indica/api/no_game.png',
+    'game' => $user->game ?: '(nenhum jogo, ainda)',
+    'image_game' => 'https://static-cdn.jtvnw.net/ttv-boxart/' . rawurlencode($user->game_id) . '_IGDB-225x300.jpg',
 ];
 
-// ====================================================================================================================
+if ($user->game == '(nenhum jogo, ainda)') $user->image_game = 'https://xt.art.br/indica/api/no_game.png';
+
+if ($user->game == 'Just Chatting') $user->image_game = 'https://static-cdn.jtvnw.net/ttv-boxart/509658-225x300.jpg';
+
+// -----------------------------------------------------------------------------
 
 $sql = "SELECT `image_custom` FROM `images` WHERE `id` = {$user->id}";
 $images = select($pdo, $sql, true);
@@ -95,7 +100,7 @@ if ($image_custom) {
     $user->image_logo = $image_custom;
 }
 
-// ====================================================================================================================
+// -----------------------------------------------------------------------------
 
 if ($action == 'bot') {
     if (!$plain) {
@@ -107,9 +112,9 @@ if ($action == 'bot') {
     exit();
 }
 
-// ====================================================================================================================
+// -----------------------------------------------------------------------------
 
-$log = [
+$log = (object)[
     'id' => $user->id,
     'channel' => $user->user,
     'game' => $user->game,
@@ -119,7 +124,7 @@ $log = [
     'date' => date('Y-m-d'),
     'hour' => date('H:i:s')
 ];
-$log = (object)$log;
+
 $sql =
     "INSERT INTO `logs` (
         `channel`,
@@ -140,7 +145,7 @@ $sql =
     )";
 query($pdo, $sql);
 
-// ====================================================================================================================
+// -----------------------------------------------------------------------------
 
 header('Content-type:application/json; charset=utf8');
 echo json_encode($user);
