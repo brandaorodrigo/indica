@@ -1,5 +1,10 @@
 <?php
 
+error_reporting(0);
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+ini_set('error_reporting', 0);
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, HEAD, OPTIONS, POST, PUT');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
@@ -33,7 +38,7 @@ include 'config.php';
 // -----------------------------------------------------------------------------
 
 $db_dsn = 'mysql:host=' . $db_host . ';dbname=' . $db_base;
-$pdo = new PDO($db_dsn, $db_user, $db_pass);
+@$pdo = new PDO($db_dsn, $db_user, $db_pass);
 
 // -----------------------------------------------------------------------------
 
